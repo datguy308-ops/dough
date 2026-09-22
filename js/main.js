@@ -52,18 +52,6 @@ document.addEventListener('DOMContentLoaded', () => {
     revealEls.forEach(el => el.classList.add('in-view'));
   }
 
-  // ---------- Menu tabs ----------
-  const tabs = document.querySelectorAll('.menu-tab');
-  const panels = document.querySelectorAll('.menu-panel');
-  tabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-      tabs.forEach(t => t.classList.remove('active'));
-      panels.forEach(p => p.classList.remove('active'));
-      tab.classList.add('active');
-      document.querySelector(`.menu-panel[data-panel="${tab.dataset.tab}"]`).classList.add('active');
-    });
-  });
-
   // ---------- Contact form (static demo submission) ----------
   const form = document.getElementById('contactForm');
   const formNote = document.getElementById('formNote');

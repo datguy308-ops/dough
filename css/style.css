@@ -426,53 +426,50 @@ a { text-decoration: none; color: inherit; }
    MENU
    ========================================================================== */
 .menu { padding: 110px 0; }
-.menu-tabs {
-  display: flex;
-  justify-content: center;
-  gap: 12px;
-  margin-bottom: 3rem;
-  flex-wrap: wrap;
+.price-note {
+  font-size: 0.82rem;
+  color: var(--gold);
+  font-style: italic;
+  margin-top: -0.5em;
 }
-.menu-tab {
-  background: var(--white);
-  border: 2px solid var(--lavender-light);
-  color: var(--plum);
-  padding: 10px 24px;
-  border-radius: 999px;
-  font-family: var(--font-body);
-  font-weight: 600;
-  font-size: 0.9rem;
-  cursor: pointer;
-  transition: all 0.25s ease;
-}
-.menu-tab:hover { border-color: var(--lavender); }
-.menu-tab.active { background: var(--plum); border-color: var(--plum); color: var(--white); }
 
-.menu-panel {
-  display: none;
+.cookie-grid {
+  display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 20px 40px;
 }
-.menu-panel.active { display: grid; }
-
-.menu-item {
-  padding: 20px 0;
+.cookie-card {
+  padding: 22px 0;
   border-bottom: 1px dashed rgba(133,103,174,0.3);
 }
-.menu-item-top {
+.cookie-card-top {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
   gap: 12px;
 }
-.menu-item h4 { color: var(--plum); }
-.menu-item .price {
+.cookie-card h4 { color: var(--plum); }
+.cookie-card .price {
   font-family: var(--font-display);
   color: var(--gold);
   font-weight: 600;
   white-space: nowrap;
+  text-align: right;
 }
-.menu-item p { color: #6a5b78; font-size: 0.92rem; margin: 6px 0 0; }
+.cookie-card .price small { font-family: var(--font-body); font-weight: 500; opacity: 0.75; font-size: 0.72rem; }
+.cookie-card p { color: #6a5b78; font-size: 0.92rem; margin: 6px 0 0; }
+
+.cottage-notice {
+  margin-top: 3rem;
+  padding: 20px 26px;
+  background: var(--lavender-light);
+  border: 1px solid var(--lavender);
+  border-radius: var(--radius-sm);
+  font-size: 0.88rem;
+  color: #5a4b68;
+  line-height: 1.6;
+}
+.cottage-notice strong { color: var(--plum); }
 
 /* ==========================================================================
    GALLERY
@@ -632,6 +629,7 @@ a { text-decoration: none; color: inherit; }
 .footer-nav a:hover, .footer-social a:hover { opacity: 1; text-decoration: underline; }
 .footer-social { display: flex; gap: 18px; }
 .footer-copy { text-align: center; font-size: 0.8rem; opacity: 0.6; margin: 20px 0 0; }
+.footer-disclosure { text-align: center; font-size: 0.74rem; opacity: 0.5; margin: 6px 0 0; }
 
 /* ==========================================================================
    BACK TO TOP
@@ -688,7 +686,7 @@ a { text-decoration: none; color: inherit; }
   }
   .main-nav.open { transform: translateY(0); }
   .nav-toggle { display: flex; }
-  .menu-panel { grid-template-columns: 1fr; }
+  .cookie-grid { grid-template-columns: 1fr; }
   .ingredient-cards { grid-template-columns: 1fr; }
   .form-row { flex-direction: column; }
   .gallery-grid { grid-template-columns: repeat(2, 1fr); }
