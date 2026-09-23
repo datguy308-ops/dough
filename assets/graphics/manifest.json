@@ -1,0 +1,524 @@
+[
+  {
+    "category": "baking-tools",
+    "name": "rolling-pin",
+    "size": [
+      189,
+      139
+    ],
+    "source": "TL[1]"
+  },
+  {
+    "category": "baking-tools",
+    "name": "wooden-spoon",
+    "size": [
+      131,
+      134
+    ],
+    "source": "TL[3]"
+  },
+  {
+    "category": "baking-tools",
+    "name": "whisk",
+    "size": [
+      85,
+      131
+    ],
+    "source": "TL[4]"
+  },
+  {
+    "category": "baking-tools",
+    "name": "oven-mitt",
+    "size": [
+      97,
+      129
+    ],
+    "source": "TL[22]"
+  },
+  {
+    "category": "baking-tools",
+    "name": "piping-bag",
+    "size": [
+      91,
+      155
+    ],
+    "source": "TL[24]"
+  },
+  {
+    "category": "baking-tools",
+    "name": "mixing-bowl",
+    "size": [
+      147,
+      111
+    ],
+    "source": "TL[27]"
+  },
+  {
+    "category": "baking-tools",
+    "name": "chef-hat",
+    "size": [
+      134,
+      91
+    ],
+    "source": "TL[44]"
+  },
+  {
+    "category": "ingredients",
+    "name": "cookie-whole",
+    "size": [
+      93,
+      91
+    ],
+    "source": "TL[5]"
+  },
+  {
+    "category": "ingredients",
+    "name": "cookie-bitten",
+    "size": [
+      95,
+      93
+    ],
+    "source": "TL[12]"
+  },
+  {
+    "category": "ingredients",
+    "name": "cookie-stack-ribbon",
+    "size": [
+      112,
+      104
+    ],
+    "source": "TL[17]"
+  },
+  {
+    "category": "ingredients",
+    "name": "cookie-crumb-piece",
+    "size": [
+      63,
+      56
+    ],
+    "source": "TL[48]"
+  },
+  {
+    "category": "ingredients",
+    "name": "cupcake",
+    "size": [
+      85,
+      102
+    ],
+    "source": "TL[33]"
+  },
+  {
+    "category": "ingredients",
+    "name": "bread-loaf",
+    "size": [
+      131,
+      88
+    ],
+    "source": "TL[34]"
+  },
+  {
+    "category": "ingredients",
+    "name": "cream-jar",
+    "size": [
+      87,
+      109
+    ],
+    "source": "TL[42]"
+  },
+  {
+    "category": "ingredients",
+    "name": "egg",
+    "size": [
+      59,
+      61
+    ],
+    "source": "TL[46]"
+  },
+  {
+    "category": "ingredients",
+    "name": "butter-dish",
+    "size": [
+      95,
+      63
+    ],
+    "source": "TL[47]"
+  },
+  {
+    "category": "ingredients",
+    "name": "dough-cloud",
+    "size": [
+      64,
+      60
+    ],
+    "source": "TL[25]"
+  },
+  {
+    "category": "decorative",
+    "name": "heart-outline-large-purple",
+    "size": [
+      48,
+      51
+    ],
+    "source": "TL[28]"
+  },
+  {
+    "category": "decorative",
+    "name": "heart-outline-small-purple",
+    "size": [
+      47,
+      48
+    ],
+    "source": "TL[29]"
+  },
+  {
+    "category": "decorative",
+    "name": "heart-solid-purple",
+    "size": [
+      69,
+      66
+    ],
+    "source": "TR[0]"
+  },
+  {
+    "category": "decorative",
+    "name": "heart-solid-purple-light",
+    "size": [
+      73,
+      64
+    ],
+    "source": "TR[1]"
+  },
+  {
+    "category": "decorative",
+    "name": "heart-outline-purple",
+    "size": [
+      69,
+      65
+    ],
+    "source": "TR[2]"
+  },
+  {
+    "category": "decorative",
+    "name": "heart-outline-thin",
+    "size": [
+      54,
+      59
+    ],
+    "source": "TR[33]"
+  },
+  {
+    "category": "decorative",
+    "name": "sparkle-cream",
+    "size": [
+      56,
+      65
+    ],
+    "source": "TR[3]"
+  },
+  {
+    "category": "decorative",
+    "name": "sparkle-purple",
+    "size": [
+      49,
+      59
+    ],
+    "source": "TR[4]"
+  },
+  {
+    "category": "decorative",
+    "name": "sparkle-diamond-white",
+    "size": [
+      56,
+      67
+    ],
+    "source": "TR[5]"
+  },
+  {
+    "category": "decorative",
+    "name": "sparkle-purple-small",
+    "size": [
+      49,
+      60
+    ],
+    "source": "TR[6]"
+  },
+  {
+    "category": "decorative",
+    "name": "confetti-dot-brown",
+    "size": [
+      37,
+      37
+    ],
+    "source": "TR[8]"
+  },
+  {
+    "category": "decorative",
+    "name": "confetti-dot-purple",
+    "size": [
+      28,
+      29
+    ],
+    "source": "TR[11]"
+  },
+  {
+    "category": "decorative",
+    "name": "bunny-ear-a",
+    "size": [
+      49,
+      74
+    ],
+    "source": "TR[20]"
+  },
+  {
+    "category": "decorative",
+    "name": "bunny-ear-b",
+    "size": [
+      52,
+      73
+    ],
+    "source": "TR[22]"
+  },
+  {
+    "category": "decorative",
+    "name": "bunny-ear-c",
+    "size": [
+      63,
+      70
+    ],
+    "source": "TR[23]"
+  },
+  {
+    "category": "decorative",
+    "name": "paw-print-a",
+    "size": [
+      71,
+      72
+    ],
+    "source": "TR[24]"
+  },
+  {
+    "category": "decorative",
+    "name": "paw-print-b",
+    "size": [
+      64,
+      66
+    ],
+    "source": "TR[25]"
+  },
+  {
+    "category": "decorative",
+    "name": "swirl-s",
+    "size": [
+      129,
+      63
+    ],
+    "source": "TR[21]"
+  },
+  {
+    "category": "decorative",
+    "name": "swirl-spiral",
+    "size": [
+      103,
+      52
+    ],
+    "source": "TR[26]"
+  },
+  {
+    "category": "decorative",
+    "name": "swirl-heart",
+    "size": [
+      142,
+      61
+    ],
+    "source": "TR[31]"
+  },
+  {
+    "category": "decorative",
+    "name": "cloud-puff-small",
+    "size": [
+      51,
+      48
+    ],
+    "source": "TR[28]"
+  },
+  {
+    "category": "decorative",
+    "name": "cloud-puff-large",
+    "size": [
+      66,
+      62
+    ],
+    "source": "TR[29]"
+  },
+  {
+    "category": "decorative",
+    "name": "ribbon-bow",
+    "size": [
+      97,
+      89
+    ],
+    "source": "TR[37]"
+  },
+  {
+    "category": "decorative",
+    "name": "ribbon-bow-alt",
+    "size": [
+      86,
+      74
+    ],
+    "source": "TR[40]"
+  },
+  {
+    "category": "decorative",
+    "name": "heart-divider-mini",
+    "size": [
+      35,
+      34
+    ],
+    "source": "TR[44]"
+  },
+  {
+    "category": "bunny",
+    "name": "bunny-spoon-cookie",
+    "size": [
+      155,
+      155
+    ],
+    "source": "BL[0]"
+  },
+  {
+    "category": "bunny",
+    "name": "bunny-mixing-wink",
+    "size": [
+      144,
+      158
+    ],
+    "source": "BL[1]"
+  },
+  {
+    "category": "bunny",
+    "name": "bunny-waving",
+    "size": [
+      150,
+      156
+    ],
+    "source": "BL[2]"
+  },
+  {
+    "category": "bunny",
+    "name": "bunny-piping-frosting",
+    "size": [
+      167,
+      191
+    ],
+    "source": "BL[11]"
+  },
+  {
+    "category": "bunny",
+    "name": "bunny-holding-tray",
+    "size": [
+      162,
+      193
+    ],
+    "source": "BL[13]"
+  },
+  {
+    "category": "bunny",
+    "name": "bunny-sitting-eating",
+    "size": [
+      190,
+      189
+    ],
+    "source": "BL[14]"
+  },
+  {
+    "category": "frames",
+    "name": "frame-cloud",
+    "size": [
+      207,
+      191
+    ],
+    "source": "BR[0]"
+  },
+  {
+    "category": "frames",
+    "name": "frame-circle",
+    "size": [
+      187,
+      184
+    ],
+    "source": "BR[3]"
+  },
+  {
+    "category": "frames",
+    "name": "frame-rectangle-scalloped",
+    "size": [
+      132,
+      194
+    ],
+    "source": "BR[4]"
+  },
+  {
+    "category": "frames",
+    "name": "frame-ribbon-banner",
+    "size": [
+      301,
+      104
+    ],
+    "source": "BR[10]"
+  },
+  {
+    "category": "frames",
+    "name": "frame-rounded-rect",
+    "size": [
+      235,
+      125
+    ],
+    "source": "BR[12]"
+  },
+  {
+    "category": "decorative",
+    "name": "heart-swirl-divider",
+    "size": [
+      308,
+      43
+    ],
+    "source": "BR[14]"
+  },
+  {
+    "category": "decorative",
+    "name": "heart-accent-small",
+    "size": [
+      32,
+      32
+    ],
+    "source": "BR[17]"
+  },
+  {
+    "category": "decorative",
+    "name": "border-hearts",
+    "size": [
+      450,
+      39
+    ],
+    "source": "TR border-strip"
+  },
+  {
+    "category": "decorative",
+    "name": "border-gingham",
+    "size": [
+      448,
+      29
+    ],
+    "source": "TR border-strip"
+  },
+  {
+    "category": "decorative",
+    "name": "border-scalloped",
+    "size": [
+      330,
+      49
+    ],
+    "source": "TR border-strip"
+  }
+]
