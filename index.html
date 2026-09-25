@@ -4,18 +4,49 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Dough Bunny — Homemade Cookies, Baked with Love</title>
-<meta name="description" content="Dough Bunny bakes homemade cookies from scratch in a Florida home kitchen — mixed, shaped, and baked by hand with real butter, pure vanilla, and a whole lot of love.">
-<meta name="theme-color" content="#FBF5EC">
+<meta name="description" content="Dough Bunny bakes homemade cookies from scratch in a Florida home kitchen — mixed, shaped, and baked by hand in small batches with real butter, pure vanilla, and a whole lot of love.">
+<meta name="theme-color" content="#FFF8EE">
 <meta property="og:title" content="Dough Bunny — Homemade Cookies &amp; Treats">
-<meta property="og:description" content="Homemade cookies, baked to order with real ingredients and a whole lot of love.">
-<meta property="og:image" content="assets/images/logo-wordmark.png">
-<link rel="icon" href="assets/images/logo-wordmark.png" type="image/png">
+<meta property="og:description" content="Homemade cookies, baked to order in small batches with real ingredients and a whole lot of love.">
+<meta property="og:image" content="assets/images/og-image.jpg">
+<link rel="icon" href="assets/images/favicon-64.png" type="image/png">
+<link rel="apple-touch-icon" href="assets/images/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..700,100;1,9..144,300..700,100&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..700,100;1,9..144,300..700,100&family=Nunito+Sans:ital,opsz,wght@0,6..12,400..800;1,6..12,400&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="assets/images/logo-wordmark.webp" type="image/webp">
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+
+<!-- Hand-drawn doodle sprite, reused across the page -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <filter id="inkRough" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="4" result="n"/>
+      <feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -1.6 1.25" result="m"/>
+      <feComposite in="SourceGraphic" in2="m" operator="in"/>
+    </filter>
+    <path id="stampRing" d="M60,60 m-44,0 a44,44 0 1,1 88,0 a44,44 0 1,1 -88,0"/>
+  </defs>
+  <symbol id="d-heart" viewBox="0 0 24 24"><path d="M12 20.5c-.6-.5-8.4-5.6-8.9-10.6C2.7 6.4 5.3 4 8 4.3c1.8.2 3.2 1.5 4 3 .8-1.6 2.3-2.9 4.2-3 2.8-.1 5 2.4 4.6 5.6-.6 4.9-8.1 10-8.8 10.6z" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="d-heart-fill" viewBox="0 0 24 24"><path d="M12 20.5c-.6-.5-8.4-5.6-8.9-10.6C2.7 6.4 5.3 4 8 4.3c1.8.2 3.2 1.5 4 3 .8-1.6 2.3-2.9 4.2-3 2.8-.1 5 2.4 4.6 5.6-.6 4.9-8.1 10-8.8 10.6z" fill="currentColor"/></symbol>
+  <symbol id="d-star" viewBox="0 0 24 24"><path d="M12 2.5c.4 4.6 1.9 8.2 9 9.4-6.8 1.3-8.5 4.6-9 9.6-.6-5-2.3-8.4-9-9.6 6.9-1.1 8.5-4.8 9-9.4z" fill="currentColor"/></symbol>
+  <symbol id="d-flower" viewBox="0 0 32 32"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M16 13.2c-2.6-3.8-1.4-8.4 0-8.6 1.5.2 2.7 4.8 0 8.6z"/><path d="M18.6 15c3.8-2.6 8.4-1.4 8.6 0-.2 1.5-4.8 2.7-8.6 0z"/><path d="M16 18.8c2.6 3.8 1.4 8.4 0 8.6-1.5-.2-2.7-4.8 0-8.6z"/><path d="M13.4 17c-3.8 2.6-8.4 1.4-8.6 0 .2-1.5 4.8-2.7 8.6 0z"/></g><circle cx="16" cy="16" r="2.4" fill="currentColor"/></symbol>
+  <symbol id="d-arrow" viewBox="0 0 90 60"><g fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10 C 28 2, 58 12, 72 44"/><path d="M60 38 L 73 47 L 78 32"/></g></symbol>
+  <symbol id="d-arrow-down" viewBox="0 0 60 80"><g fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M10 4 C 40 14, 44 40, 30 70"/><path d="M20 60 L 29 72 L 40 62"/></g></symbol>
+  <symbol id="d-check" viewBox="0 0 24 24"><path d="M4 13.5 C 6.5 15, 8 17, 9.5 19.5 C 12 13, 15.5 8, 21 4.5" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="d-flour" viewBox="0 0 120 80"><g fill="#fff"><circle cx="20" cy="40" r="3"/><circle cx="34" cy="30" r="2"/><circle cx="46" cy="46" r="4"/><circle cx="60" cy="34" r="2.5"/><circle cx="72" cy="50" r="3"/><circle cx="86" cy="38" r="2"/><circle cx="98" cy="48" r="2.6"/><circle cx="54" cy="58" r="1.8"/><circle cx="28" cy="54" r="1.6"/><circle cx="80" cy="26" r="1.5"/><ellipse cx="60" cy="44" rx="40" ry="14" opacity=".35"/></g></symbol>
+  <symbol id="d-stamp" viewBox="0 0 120 120">
+    <g filter="url(#inkRough)" fill="currentColor" stroke="currentColor">
+      <circle cx="60" cy="60" r="56" fill="none" stroke-width="3"/>
+      <circle cx="60" cy="60" r="33" fill="none" stroke-width="1.6"/>
+      <text font-family="Nunito Sans, sans-serif" font-weight="800" font-size="10.5" stroke="none" letter-spacing="1.5"><textPath href="#stampRing" textLength="272" lengthAdjust="spacing">DOUGH BUNNY ♥ BAKED WITH LOVE ♥</textPath></text>
+      <text x="60" y="56" text-anchor="middle" font-family="Fraunces, serif" font-weight="700" font-size="9" stroke="none" letter-spacing="1">EST.</text>
+      <text x="60" y="72" text-anchor="middle" font-family="Fraunces, serif" font-weight="700" font-size="16" stroke="none">2026</text>
+    </g>
+  </symbol>
+</svg>
 
 <a class="skip-link" href="#main">Skip to content</a>
 
@@ -23,16 +54,16 @@
 <header class="site-header" id="siteHeader">
   <div class="container header-inner">
     <a href="#home" class="brand" aria-label="Dough Bunny home">
-      <img src="assets/images/logo.jpg" alt="" class="brand-logo" width="44" height="44">
+      <img src="assets/images/logo.jpg" alt="" class="brand-logo" width="779" height="778">
       <span class="brand-name">Dough Bunny</span>
     </a>
 
     <nav class="main-nav" id="mainNav" aria-label="Main">
-      <a href="#kitchen">Our Kitchen</a>
-      <a href="#recipe">Made by Hand</a>
       <a href="#menu">Cookies</a>
+      <a href="#recipe">Made by Hand</a>
+      <a href="#kitchen">Our Kitchen</a>
       <a href="#how">How to Order</a>
-      <a href="#order" class="nav-cta">Order with Love <span aria-hidden="true">♡</span></a>
+      <a href="#order" class="nav-cta"><span>Order with Love</span> <svg aria-hidden="true"><use href="#d-heart-fill"/></svg></a>
     </nav>
 
     <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="mainNav">
@@ -44,112 +75,248 @@
 <main id="main">
 
 <!-- ============ HERO ============ -->
-<section class="hero" id="home">
+<section class="hero paper" id="home">
   <div class="container hero-inner">
     <div class="hero-copy">
-      <p class="eyebrow fade-up" style="--d:0s">Homemade in Florida <span class="heart" aria-hidden="true">♡</span> Baked with love</p>
+      <p class="hand-label fade-up" style="--d:0s">
+        <svg class="doodle" aria-hidden="true"><use href="#d-star"/></svg>
+        a little Florida cottage bakery
+      </p>
       <h1 class="fade-up" style="--d:.1s">
-        Homemade cookies,<br>
-        <span class="love">made with love.</span>
+        <span class="h1-serif">Homemade cookies,</span>
+        <span class="h1-script">made with love.
+          <svg class="scribble-underline" viewBox="0 0 300 18" preserveAspectRatio="none" aria-hidden="true"><path d="M4 12 C 40 5, 70 5, 104 10 S 170 16, 206 8 S 270 3, 296 9"/></svg>
+        </span>
       </h1>
       <p class="hero-lede fade-up" style="--d:.2s">Every Dough Bunny cookie is mixed, shaped, and baked by hand in our home kitchen — one small batch at a time, with real butter, pure vanilla, and the same care we'd put into baking for our own family.</p>
       <div class="hero-actions fade-up" style="--d:.3s">
-        <a href="#menu" class="btn btn-primary">See What's Baking <span aria-hidden="true">→</span></a>
-        <a href="#order" class="btn btn-ghost">Order a Box</a>
+        <a href="#menu" class="btn btn-primary">See What's Baking <span class="btn-arrow" aria-hidden="true">→</span></a>
+        <a href="#order" class="btn btn-cream">Order a Box <svg aria-hidden="true"><use href="#d-heart-fill"/></svg></a>
       </div>
-      <ul class="hero-promises fade-up" style="--d:.4s">
-        <li><span class="promise-icon" aria-hidden="true">♡</span>Made from scratch</li>
-        <li><span class="promise-icon" aria-hidden="true">♡</span>Shaped by hand</li>
-        <li><span class="promise-icon" aria-hidden="true">♡</span>Baked just for you</li>
-      </ul>
+      <div class="hero-ephemera fade-up" style="--d:.45s">
+        <svg class="stamp stamp--hero" role="img" aria-label="Dough Bunny, baked with love, established 2026"><use href="#d-stamp"/></svg>
+        <ul class="hero-promises">
+          <li><svg aria-hidden="true"><use href="#d-check"/></svg>Made from scratch</li>
+          <li><svg aria-hidden="true"><use href="#d-check"/></svg>Shaped by hand</li>
+          <li><svg aria-hidden="true"><use href="#d-check"/></svg>Baked just for you</li>
+        </ul>
+      </div>
     </div>
 
-    <div class="hero-visual fade-up" style="--d:.15s">
+    <div class="hero-collage fade-up" style="--d:.15s">
       <div class="hero-plate">
-        <img src="assets/images/logo-wordmark.png" alt="Dough Bunny — Cookies &amp; Treats logo: a baker bunny in a chef's hat holding a wooden spoon and a chocolate chip cookie" class="hero-logo" width="500" height="500">
+        <img src="assets/images/logo-wordmark.webp" alt="Dough Bunny — Cookies &amp; Treats logo: a baker bunny in a chef's hat holding a wooden spoon and a chocolate chip cookie" class="hero-logo" fetchpriority="high" width="1200" height="1200">
       </div>
-      <img src="assets/graphics/web/decorative/ribbon-bow.png" alt="" class="hero-bow" aria-hidden="true">
-      <p class="hero-note" aria-hidden="true">from our kitchen<br>to yours ♡
-        <svg viewBox="0 0 90 60" class="note-arrow"><path d="M4 8 C 30 4, 60 14, 70 44" /><path d="M58 38 L 71 46 L 76 31" /></svg>
-      </p>
-      <svg class="hero-badge" viewBox="0 0 200 200" aria-hidden="true">
-        <defs><path id="badgeCircle" d="M100,100 m-76,0 a76,76 0 1,1 152,0 a76,76 0 1,1 -152,0"/></defs>
-        <text textLength="474" lengthAdjust="spacing"><textPath href="#badgeCircle" textLength="474" lengthAdjust="spacing">HOMEMADE ♥ MADE WITH LOVE ♥ BAKED TO ORDER ♥</textPath></text>
-      </svg>
-      <span class="hero-badge-core" aria-hidden="true">
-        <img src="assets/graphics/web/decorative/paw-print-a.png" alt="">
-      </span>
-      <div class="float-cookie fc-1" data-cookie="choc" aria-hidden="true"></div>
-      <div class="float-cookie fc-2" data-cookie="strawberry" aria-hidden="true"></div>
-      <div class="float-cookie fc-3" data-cookie="cutout" aria-hidden="true"></div>
-      <img src="assets/graphics/web/decorative/heart-solid-purple-light.png" alt="" class="hero-deco d-1" aria-hidden="true">
-      <img src="assets/graphics/web/decorative/sparkle-cream.png" alt="" class="hero-deco d-2" aria-hidden="true">
-      <img src="assets/graphics/web/decorative/heart-outline-purple.png" alt="" class="hero-deco d-3" aria-hidden="true">
+      <img src="assets/graphics/web/decorative/ribbon-bow.webp" alt="" class="c-bow" aria-hidden="true" width="388" height="356">
+
+      <!-- scrapbook bits around the plate -->
+      <img src="assets/graphics/web/baking-tools/rolling-pin.webp" alt="" class="c-item c-rollingpin" aria-hidden="true" width="756" height="556">
+      <img src="assets/graphics/web/baking-tools/wooden-spoon.webp" alt="" class="c-item c-spoon" aria-hidden="true" width="352" height="360">
+      <img src="assets/graphics/web/ingredients/butter-dish.webp" alt="" class="c-item c-butter" aria-hidden="true" width="360" height="239">
+      <div class="float-cookie c-cookie-1" data-cookie="choc" aria-hidden="true"></div>
+      <div class="float-cookie c-cookie-2" data-cookie="strawberry" aria-hidden="true"></div>
+      <svg class="c-flour" aria-hidden="true"><use href="#d-flour"/></svg>
+      <svg class="c-doodle c-flower" aria-hidden="true"><use href="#d-flower"/></svg>
+      <svg class="c-doodle c-heart" aria-hidden="true"><use href="#d-heart"/></svg>
+      <svg class="c-doodle c-star-1" aria-hidden="true"><use href="#d-star"/></svg>
+      <svg class="c-doodle c-star-2" aria-hidden="true"><use href="#d-star"/></svg>
+      <img src="assets/graphics/web/decorative/paw-print-a.webp" alt="" class="c-paw" aria-hidden="true" width="217" height="220">
+
+      <div class="c-card" aria-hidden="true">
+        <span class="c-card-label">our signature</span>
+        <span class="c-card-name">Chocolate Chip</span>
+        <span class="c-card-note">extra gooey ♡</span>
+      </div>
+
+      <p class="c-note c-note--kitchen" aria-hidden="true">from our kitchen<br>to yours ♡<svg class="c-arrow"><use href="#d-arrow"/></svg></p>
+      <p class="c-note c-note--oven" aria-hidden="true"><svg class="c-arrow c-arrow--flip"><use href="#d-arrow"/></svg>fresh from<br>the oven</p>
     </div>
   </div>
 </section>
 
-<!-- ============ MARQUEE ============ -->
-<div class="marquee-wrap" aria-hidden="true">
-<div class="marquee">
-  <div class="marquee-track">
-    <span>Homemade</span><i>♥</i><span>Made with Love</span><i>♥</i><span>From Our Kitchen to Yours</span><i>♥</i><span>Mixed by Hand</span><i>♥</i><span>Baked to Order</span><i>♥</i><span>Real Butter</span><i>♥</i>
-    <span>Homemade</span><i>♥</i><span>Made with Love</span><i>♥</i><span>From Our Kitchen to Yours</span><i>♥</i><span>Mixed by Hand</span><i>♥</i><span>Baked to Order</span><i>♥</i><span>Real Butter</span><i>♥</i>
-  </div>
-</div>
-</div>
-
-<!-- ============ OUR KITCHEN ============ -->
-<section class="kitchen section" id="kitchen">
-  <div class="container kitchen-grid">
-    <div class="kitchen-visual reveal">
-      <figure class="snapshot snapshot--big">
-        <img src="assets/graphics/web/bunny/bunny-holding-tray.png" alt="Dough Bunny holding a tray of cookies fresh from the oven" loading="lazy" width="480" height="480">
-        <figcaption>fresh out of the oven!</figcaption>
-      </figure>
-      <figure class="snapshot snapshot--small">
-        <img src="assets/graphics/web/bunny/bunny-mixing-wink.png" alt="Dough Bunny mixing a bowl of cookie dough" loading="lazy" width="480" height="480">
-        <figcaption>mixing by hand</figcaption>
-      </figure>
-      <img src="assets/graphics/web/decorative/swirl-heart.png" alt="" class="kitchen-swirl" aria-hidden="true" loading="lazy">
+<!-- ============ WHAT'S BAKING ============ -->
+<section class="baking gingham-soft torn-top" id="baking">
+  <div class="container baking-grid">
+    <div class="baking-intro reveal">
+      <p class="hand-label">what's baking</p>
+      <h2>Small batches, <span class="script-accent">big love.</span></h2>
+      <p>Nothing here is made ahead or pulled from a warehouse shelf. When you order, we pull out the mixing bowl and bake your box from scratch — that's the whole secret.</p>
+      <p class="hand-note">our signature treat <svg class="hand-note-arrow" aria-hidden="true"><use href="#d-arrow"/></svg></p>
     </div>
 
-    <div class="kitchen-letter reveal">
-      <p class="eyebrow">Our Kitchen</p>
-      <h2>From our home kitchen <span class="love love--sm">to yours.</span></h2>
-      <p class="lead">Dough Bunny isn't a factory or a storefront — it's a home kitchen, a well-loved mixing bowl, and a lot of heart.</p>
-      <p>We started baking the way most of us learned: for family, for friends, for birthdays and bad days and "just because." Every recipe was tested and tweaked at home until it tasted like a hug.</p>
-      <p>We still bake that way. As a licensed Florida cottage food operation, every order is made from scratch and baked fresh just for you — never mass-produced, never sitting on a shelf.</p>
-      <p class="signature">With love,<br>Dough Bunny <span aria-hidden="true">♡</span></p>
-    </div>
+    <article class="spotlight reveal" style="--tilt:-1.5deg" aria-labelledby="spotlightName">
+      <span class="tape tape--tl" aria-hidden="true"></span>
+      <span class="tape tape--br tape--pink" aria-hidden="true"></span>
+      <div class="spotlight-art" data-cookie="choc" aria-hidden="true"></div>
+      <div class="spotlight-body">
+        <span class="label-chip">Batch No. 014</span>
+        <h3 id="spotlightName">Chocolate Chip</h3>
+        <p class="card-hand">♡ the one we're known for</p>
+        <p>Thick, soft, gooey, and buttery — with just enough semisweet chocolate to let the homemade dough shine.</p>
+        <button type="button" class="btn btn-small add-love" data-flavor="Chocolate Chip" aria-pressed="false"><span class="add-label">Add a little love</span> <svg aria-hidden="true"><use href="#d-heart-fill"/></svg></button>
+      </div>
+    </article>
+
+    <ul class="tags reveal" aria-label="How we bake">
+      <li class="tag" style="--tilt:3deg"><strong>Made from scratch</strong><span>no boxed mixes, ever</span></li>
+      <li class="tag" style="--tilt:-2deg"><strong>Shaped by hand</strong><span>every scoop, roll &amp; cut</span></li>
+      <li class="tag" style="--tilt:2deg"><strong>Small batches</strong><span>by the tray, not the ton</span></li>
+      <li class="tag" style="--tilt:-3deg"><strong>Baked for you</strong><span>only once you order</span></li>
+    </ul>
   </div>
 </section>
 
-<!-- ============ RECIPE FOR LOVE ============ -->
-<section class="recipe section" id="recipe">
+<!-- ============ COOKIES ============ -->
+<section class="menu paper torn-top" id="menu">
   <div class="container">
     <div class="section-head reveal">
-      <p class="eyebrow">Made by hand</p>
-      <h2>Our secret ingredient? <span class="love">Love.</span></h2>
+      <p class="hand-label">the cookie jar</p>
+      <h2>Seven homemade favorites, <span class="script-accent">baked to order.</span></h2>
+      <p class="section-lede">Each one is a recipe we've perfected in our own kitchen. Tap <em>Add a little love</em> to start your box — mix and match by the dozen.</p>
+    </div>
+
+    <div class="cookie-grid">
+      <article class="recipe-tile reveal" style="--tilt:-1.2deg">
+        <span class="tape tape--top" aria-hidden="true"></span>
+        <span class="label-chip label-chip--butter">our signature</span>
+        <div class="tile-art" data-cookie="choc" aria-hidden="true"></div>
+        <h3>Chocolate Chip</h3>
+        <p class="card-hand">♡ the classic</p>
+        <p class="tile-notes">Semisweet chocolate · real butter</p>
+        <p class="tile-desc">Thick, soft, gooey, and buttery — with just enough chocolate to let the dough shine.</p>
+        <div class="tile-foot">
+          <p class="price">$4.00 <small>each · $24 / dozen</small></p>
+          <button type="button" class="btn btn-small add-love" data-flavor="Chocolate Chip" aria-pressed="false"><span class="add-label">Add a little love</span> <svg aria-hidden="true"><use href="#d-heart-fill"/></svg></button>
+        </div>
+      </article>
+
+      <article class="recipe-tile reveal" style="--tilt:1deg">
+        <span class="tape tape--top tape--pink" aria-hidden="true"></span>
+        <div class="tile-art" data-cookie="strawberry" aria-hidden="true"></div>
+        <h3>Strawberry Shortcake</h3>
+        <p class="card-hand">♡ pretty in pink</p>
+        <p class="tile-notes">Strawberry · white chocolate · Golden Oreo</p>
+        <p class="tile-desc">Thick strawberry cookies with white chocolate, Golden Oreo crunch, and a white chocolate drizzle.</p>
+        <div class="tile-foot">
+          <p class="price">$4.50 <small>each · $27 / dozen</small></p>
+          <button type="button" class="btn btn-small add-love" data-flavor="Strawberry Shortcake" aria-pressed="false"><span class="add-label">Add a little love</span> <svg aria-hidden="true"><use href="#d-heart-fill"/></svg></button>
+        </div>
+      </article>
+
+      <article class="recipe-tile reveal" style="--tilt:-.6deg">
+        <span class="label-chip">hand-piped</span>
+        <div class="tile-art" data-cookie="cutout" aria-hidden="true"></div>
+        <h3>Frosted Butter Cut-Out</h3>
+        <p class="card-hand">♡ shaped by hand</p>
+        <p class="tile-notes">Vanilla butter dough · piped frosting</p>
+        <p class="tile-desc">Soft vanilla butter cookies, rolled and cut by hand, then finished with hand-piped frosting.</p>
+        <div class="tile-foot">
+          <p class="price">$4.00 <small>each · $24 / dozen</small></p>
+          <button type="button" class="btn btn-small add-love" data-flavor="Frosted Butter Cut-Out" aria-pressed="false"><span class="add-label">Add a little love</span> <svg aria-hidden="true"><use href="#d-heart-fill"/></svg></button>
+        </div>
+      </article>
+
+      <article class="recipe-tile reveal" style="--tilt:1.4deg">
+        <span class="tape tape--top" aria-hidden="true"></span>
+        <span class="label-chip label-chip--pink">Cuban-inspired</span>
+        <div class="tile-art" data-cookie="snicker" aria-hidden="true"></div>
+        <h3>Natilla Snickerdoodle</h3>
+        <p class="card-hand">♡ a cozy hug</p>
+        <p class="tile-notes">Cinnamon sugar · vanilla · hint of lemon</p>
+        <p class="tile-desc">A cozy cinnamon-sugar cookie inspired by Cuban natilla — creamy vanilla with a whisper of lemon.</p>
+        <div class="tile-foot">
+          <p class="price">$4.00 <small>each · $24 / dozen</small></p>
+          <button type="button" class="btn btn-small add-love" data-flavor="Natilla Snickerdoodle" aria-pressed="false"><span class="add-label">Add a little love</span> <svg aria-hidden="true"><use href="#d-heart-fill"/></svg></button>
+        </div>
+      </article>
+
+      <article class="recipe-tile reveal" style="--tilt:-1.4deg">
+        <div class="tile-art" data-cookie="banana" aria-hidden="true"></div>
+        <h3>Banana Pudding</h3>
+        <p class="card-hand">♡ soft &amp; creamy</p>
+        <p class="tile-notes">Banana · Nilla Wafers · white chocolate</p>
+        <p class="tile-desc">Creamy banana-vanilla cookies with Nilla Wafers and white chocolate, soft in the middle.</p>
+        <div class="tile-foot">
+          <p class="price">$4.50 <small>each · $27 / dozen</small></p>
+          <button type="button" class="btn btn-small add-love" data-flavor="Banana Pudding" aria-pressed="false"><span class="add-label">Add a little love</span> <svg aria-hidden="true"><use href="#d-heart-fill"/></svg></button>
+        </div>
+      </article>
+
+      <article class="recipe-tile reveal" style="--tilt:.8deg">
+        <span class="tape tape--top tape--butter" aria-hidden="true"></span>
+        <div class="tile-art" data-cookie="brownie" aria-hidden="true"></div>
+        <h3>Brownie Crispy-Top</h3>
+        <p class="card-hand">♡ for chocolate lovers</p>
+        <p class="tile-notes">Fudgy center · crackly top</p>
+        <p class="tile-desc">Fudgy brownie centers, chewy edges, and that glossy, crackly top you can hear.</p>
+        <div class="tile-foot">
+          <p class="price">$4.50 <small>each · $27 / dozen</small></p>
+          <button type="button" class="btn btn-small add-love" data-flavor="Brownie Crispy-Top" aria-pressed="false"><span class="add-label">Add a little love</span> <svg aria-hidden="true"><use href="#d-heart-fill"/></svg></button>
+        </div>
+      </article>
+
+      <article class="recipe-tile reveal" style="--tilt:-.8deg">
+        <span class="tape tape--top tape--pink" aria-hidden="true"></span>
+        <div class="tile-art" data-cookie="smores" aria-hidden="true"></div>
+        <h3>S'mores</h3>
+        <p class="card-hand">♡ campfire cozy</p>
+        <p class="tile-notes">Graham · chocolate · marshmallow</p>
+        <p class="tile-desc">Brown-sugar cookies packed with graham cracker, chocolate, and a gooey marshmallow center.</p>
+        <div class="tile-foot">
+          <p class="price">$4.50 <small>each · $27 / dozen</small></p>
+          <button type="button" class="btn btn-small add-love" data-flavor="S'mores" aria-pressed="false"><span class="add-label">Add a little love</span> <svg aria-hidden="true"><use href="#d-heart-fill"/></svg></button>
+        </div>
+      </article>
+
+      <aside class="mix-note reveal" style="--tilt:2deg">
+        <span class="tape tape--top tape--butter" aria-hidden="true"></span>
+        <img src="assets/graphics/web/ingredients/cookie-stack-ribbon.webp" alt="" aria-hidden="true" loading="lazy" width="360" height="334">
+        <h3>Can't choose?</h3>
+        <p>Add a few favorites and we'll pack a mixed dozen — perfect for sharing with the people you love.</p>
+        <a href="#order" class="btn btn-small btn-primary">Build my box →</a>
+      </aside>
+    </div>
+
+    <div class="menu-footnotes">
+      <!-- TODO: replace placeholder pricing with final prices -->
+      <p class="price-note reveal">psst — prices shown are placeholders and will be finalized soon.</p>
+      <div class="cottage-notice reveal">
+        <span class="tape tape--top" aria-hidden="true"></span>
+        <strong>Cottage Food Notice</strong>
+        <p>Made in a cottage food operation that is not subject to Florida's food safety regulations. Contains wheat, dairy, and eggs; some flavors contain soy, and the Frosted Butter Cut-Out may contain almond. Please tell us about any allergies before ordering.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MADE BY HAND ============ -->
+<section class="recipe pink-paper torn-top" id="recipe">
+  <div class="container">
+    <div class="section-head reveal">
+      <p class="hand-label">made by hand</p>
+      <h2>Our secret ingredient? <span class="script-accent">Love.</span></h2>
       <p class="section-lede">Okay, and real butter. Here's what goes into every batch — the same things you'd find in any loving home kitchen.</p>
     </div>
 
     <div class="recipe-grid">
-      <article class="recipe-card reveal" aria-labelledby="recipeTitle">
+      <article class="recipe-card reveal" style="--tilt:-1deg" aria-labelledby="recipeTitle">
+        <span class="tape tape--tl" aria-hidden="true"></span>
+        <span class="tape tape--tr tape--pink" aria-hidden="true"></span>
         <div class="recipe-card-top">
           <span>From the kitchen of</span>
           <strong>Dough Bunny</strong>
+          <span class="recipe-serves">serves: everyone you love</span>
         </div>
         <h3 id="recipeTitle">Recipe for a Homemade Cookie</h3>
         <div class="recipe-cols">
           <div>
             <h4>Ingredients</h4>
             <ul class="recipe-list">
-              <li><img src="assets/graphics/web/ingredients/butter-dish.png" alt="" loading="lazy">Real butter — never shortening</li>
-              <li><img src="assets/graphics/web/ingredients/cream-jar.png" alt="" loading="lazy">Pure vanilla extract</li>
-              <li><img src="assets/graphics/web/ingredients/cookie-whole.png" alt="" loading="lazy">Real chocolate &amp; real fruit</li>
-              <li><img src="assets/graphics/web/ingredients/egg.png" alt="" loading="lazy">Whole eggs, no powders</li>
-              <li><img src="assets/graphics/web/decorative/heart-solid-purple.png" alt="" loading="lazy"><em>A whole lot of love</em></li>
+              <li><img src="assets/graphics/web/ingredients/butter-dish.webp" alt="" loading="lazy" width="360" height="239">Real butter — never shortening</li>
+              <li><img src="assets/graphics/web/ingredients/cream-jar.webp" alt="" loading="lazy" width="287" height="360">Pure vanilla extract</li>
+              <li><img src="assets/graphics/web/ingredients/cookie-whole.webp" alt="" loading="lazy" width="360" height="352">Real chocolate &amp; real fruit</li>
+              <li><img src="assets/graphics/web/ingredients/egg.webp" alt="" loading="lazy" width="236" height="244">Whole eggs, no powders</li>
+              <li class="recipe-love"><svg aria-hidden="true"><use href="#d-heart-fill"/></svg>A whole lot of love</li>
             </ul>
           </div>
           <div>
@@ -163,164 +330,94 @@
             </ol>
           </div>
         </div>
+        <p class="recipe-margin-note" aria-hidden="true">don't skimp<br>on the butter!</p>
       </article>
 
-      <aside class="sticky-note reveal" aria-labelledby="neverTitle">
+      <aside class="sticky-note reveal" style="--tilt:3deg" aria-labelledby="neverTitle">
+        <span class="tape tape--top tape--pink" aria-hidden="true"></span>
         <h3 id="neverTitle">Things we'd never put in a cookie:</h3>
         <ul>
-          <li>shortening or margarine</li>
-          <li>imitation vanilla</li>
-          <li>artificial preservatives</li>
-          <li>boxed pre-mixes</li>
-          <li>day-old anything</li>
+          <li><span>shortening or margarine</span></li>
+          <li><span>imitation vanilla</span></li>
+          <li><span>artificial preservatives</span></li>
+          <li><span>boxed pre-mixes</span></li>
+          <li><span>day-old anything</span></li>
         </ul>
-        <p>xo, the bunny</p>
-      </aside>
-    </div>
-  </div>
-</section>
-
-<!-- ============ MENU ============ -->
-<section class="menu section" id="menu">
-  <div class="container">
-    <div class="section-head reveal">
-      <p class="eyebrow">Fresh from our oven</p>
-      <h2>Seven homemade cookies, <span class="love">baked with love.</span></h2>
-      <p class="section-lede">Each one is a recipe we've perfected in our own kitchen, made from scratch and baked fresh to order. Mix and match by the dozen.</p>
-    </div>
-
-    <div class="cookie-grid">
-      <article class="cookie-card cookie-card--feature reveal">
-        <span class="ribbon">Our signature ♡</span>
-        <div class="cookie-art" data-cookie="choc" aria-hidden="true"></div>
-        <div class="cookie-body">
-          <h3>Chocolate Chip</h3>
-          <p>Thick, soft, gooey, and buttery — with just enough chocolate to let the homemade dough shine.</p>
-          <div class="cookie-meta"><span class="price">$4.00 <small>ea · $24 / dozen</small></span></div>
-        </div>
-      </article>
-
-      <article class="cookie-card reveal">
-        <div class="cookie-art" data-cookie="strawberry" aria-hidden="true"></div>
-        <div class="cookie-body">
-          <h3>Strawberry Shortcake</h3>
-          <p>Thick strawberry cookies with white chocolate, Golden Oreo crunch, and a white chocolate drizzle.</p>
-          <div class="cookie-meta"><span class="price">$4.50 <small>ea · $27 / dozen</small></span></div>
-        </div>
-      </article>
-
-      <article class="cookie-card reveal">
-        <div class="cookie-art" data-cookie="cutout" aria-hidden="true"></div>
-        <div class="cookie-body">
-          <h3>Frosted Butter Cut-Out</h3>
-          <p>Soft vanilla butter cookies, rolled and cut by hand, then finished with hand-piped frosting.</p>
-          <div class="cookie-meta"><span class="price">$4.00 <small>ea · $24 / dozen</small></span></div>
-        </div>
-      </article>
-
-      <article class="cookie-card reveal">
-        <div class="cookie-art" data-cookie="snicker" aria-hidden="true"></div>
-        <div class="cookie-body">
-          <h3>Natilla Snickerdoodle</h3>
-          <p>A cozy cinnamon-sugar cookie inspired by Cuban natilla — creamy vanilla with a whisper of lemon.</p>
-          <div class="cookie-meta"><span class="price">$4.00 <small>ea · $24 / dozen</small></span></div>
-        </div>
-      </article>
-
-      <article class="cookie-card reveal">
-        <div class="cookie-art" data-cookie="banana" aria-hidden="true"></div>
-        <div class="cookie-body">
-          <h3>Banana Pudding</h3>
-          <p>Creamy banana-vanilla cookies with Nilla Wafers and white chocolate, soft in the middle.</p>
-          <div class="cookie-meta"><span class="price">$4.50 <small>ea · $27 / dozen</small></span></div>
-        </div>
-      </article>
-
-      <article class="cookie-card reveal">
-        <div class="cookie-art" data-cookie="brownie" aria-hidden="true"></div>
-        <div class="cookie-body">
-          <h3>Brownie Crispy-Top</h3>
-          <p>Fudgy brownie centers, chewy edges, and that glossy, crackly top you can hear.</p>
-          <div class="cookie-meta"><span class="price">$4.50 <small>ea · $27 / dozen</small></span></div>
-        </div>
-      </article>
-
-      <article class="cookie-card reveal">
-        <div class="cookie-art" data-cookie="smores" aria-hidden="true"></div>
-        <div class="cookie-body">
-          <h3>S'mores</h3>
-          <p>Brown-sugar cookies packed with graham cracker, chocolate, and a gooey marshmallow center.</p>
-          <div class="cookie-meta"><span class="price">$4.50 <small>ea · $27 / dozen</small></span></div>
-        </div>
-      </article>
-
-      <aside class="cookie-card cookie-card--cta reveal">
-        <img src="assets/graphics/web/ingredients/cookie-stack-ribbon.png" alt="" loading="lazy" aria-hidden="true">
-        <h3>Can't choose?</h3>
-        <p>Build a mixed dozen of your favorites — perfect for sharing with the people you love.</p>
-        <a href="#order" class="btn btn-light">Build a Box</a>
+        <p>xo, the bunny <svg aria-hidden="true"><use href="#d-heart"/></svg></p>
       </aside>
     </div>
 
-    <!-- TODO: replace placeholder pricing with final prices -->
-    <p class="price-note reveal">Prices shown are placeholders and will be finalized soon.</p>
-
-    <div class="cottage-notice reveal">
-      <strong>Cottage Food Notice</strong>
-      <p>Made in a cottage food operation that is not subject to Florida's food safety regulations. Contains wheat, dairy, and eggs; some flavors contain soy, and the Frosted Butter Cut-Out may contain almond. Please tell us about any allergies before ordering.</p>
+    <div class="polaroid-row" role="list" aria-label="Snapshots of Dough Bunny baking">
+      <figure class="polaroid reveal" role="listitem" style="--tilt:-3deg">
+        <span class="tape tape--top" aria-hidden="true"></span>
+        <img src="assets/graphics/web/bunny/bunny-mixing-wink.webp" alt="Dough Bunny mixing a bowl of cookie dough with a wink" loading="lazy" width="576" height="632">
+        <figcaption>mixed by hand</figcaption>
+      </figure>
+      <figure class="polaroid reveal" role="listitem" style="--tilt:2deg">
+        <span class="tape tape--top tape--pink" aria-hidden="true"></span>
+        <img src="assets/graphics/web/bunny/bunny-piping-frosting.webp" alt="Dough Bunny piping frosting onto a tray of cookies" loading="lazy" width="668" height="764">
+        <figcaption>frosted with care</figcaption>
+      </figure>
+      <figure class="polaroid reveal" role="listitem" style="--tilt:-1.5deg">
+        <span class="tape tape--top tape--butter" aria-hidden="true"></span>
+        <img src="assets/graphics/web/bunny/bunny-spoon-cookie.webp" alt="Dough Bunny holding a wooden spoon and a cookie" loading="lazy" width="620" height="620">
+        <figcaption>taste-tested (for quality!)</figcaption>
+      </figure>
+      <figure class="polaroid reveal" role="listitem" style="--tilt:3deg">
+        <span class="tape tape--top" aria-hidden="true"></span>
+        <img src="assets/graphics/web/bunny/bunny-sitting-eating.webp" alt="Dough Bunny sitting happily with a pile of cookies" loading="lazy" width="760" height="756">
+        <figcaption>the best part of the job</figcaption>
+      </figure>
     </div>
   </div>
 </section>
 
-<!-- ============ HOW TO ORDER ============ -->
-<section class="how section" id="how">
+<!-- ============ OUR KITCHEN + LOVE NOTES ============ -->
+<section class="kitchen notebook torn-top" id="kitchen">
   <div class="container">
-    <div class="section-head reveal">
-      <p class="eyebrow">Order &amp; Pickup</p>
-      <h2>Baked just <span class="love">for you.</span></h2>
-      <p class="section-lede">Because everything is homemade, there's no walk-in shop — each box is baked to order for local pickup or delivery.</p>
-    </div>
-    <ol class="steps">
-      <li class="step reveal">
-        <div class="step-art"><img src="assets/graphics/web/bunny/bunny-spoon-cookie.png" alt="" loading="lazy"></div>
-        <span class="step-num">step one</span>
-        <h3>Pick your favorites</h3>
-        <p>Choose a single flavor or build a mixed dozen from our homemade collection.</p>
-      </li>
-      <li class="step reveal">
-        <div class="step-art"><img src="assets/graphics/web/bunny/bunny-piping-frosting.png" alt="" loading="lazy"></div>
-        <span class="step-num">step two</span>
-        <h3>We bake with love</h3>
-        <p>Give us 48–72 hours' notice. We'll confirm your order, then mix and bake it fresh.</p>
-      </li>
-      <li class="step reveal">
-        <div class="step-art"><img src="assets/graphics/web/bunny/bunny-waving.png" alt="" loading="lazy"></div>
-        <span class="step-num">step three</span>
-        <h3>Share the love</h3>
-        <p>Pick up your box fresh from our kitchen, or we'll arrange local delivery nearby.</p>
-      </li>
-    </ol>
-  </div>
-</section>
+    <div class="kitchen-grid">
+      <div class="kitchen-photos reveal">
+        <figure class="polaroid polaroid--big" style="--tilt:-4deg">
+          <span class="tape tape--top tape--pink" aria-hidden="true"></span>
+          <img src="assets/graphics/web/bunny/bunny-holding-tray.webp" alt="Dough Bunny holding a tray of cookies fresh from the oven" loading="lazy" width="648" height="772">
+          <figcaption>fresh out of the oven!</figcaption>
+        </figure>
+        <figure class="polaroid polaroid--small" style="--tilt:6deg">
+          <span class="tape tape--top" aria-hidden="true"></span>
+          <img src="assets/graphics/web/bunny/bunny-waving.webp" alt="Dough Bunny waving hello" loading="lazy" width="600" height="624">
+          <figcaption>hi, neighbor!</figcaption>
+        </figure>
+        <svg class="kitchen-heart" aria-hidden="true"><use href="#d-heart"/></svg>
+      </div>
 
-<!-- ============ KIND WORDS ============ -->
-<!-- TODO: replace sample testimonials with real customer reviews -->
-<section class="notes section" id="kind-words">
-  <div class="container">
-    <div class="section-head reveal">
-      <p class="eyebrow">Little love notes</p>
-      <h2>Kind words from <span class="love">our neighbors.</span></h2>
+      <div class="letter reveal" style="--tilt:.8deg">
+        <span class="tape tape--top tape--butter" aria-hidden="true"></span>
+        <p class="hand-label">our kitchen</p>
+        <h2>From our home kitchen <span class="script-accent">to yours.</span></h2>
+        <p class="lead">Dough Bunny isn't a factory or a storefront — it's a home kitchen, a well-loved mixing bowl, and a lot of heart.</p>
+        <p>We started baking the way most of us learned: for family, for friends, for birthdays and bad days and "just because." Every recipe was tested and tweaked at home until it tasted like a hug.</p>
+        <p>We still bake that way. As a licensed Florida cottage food operation, every order is made from scratch and baked fresh just for you — never mass-produced, never sitting on a shelf.</p>
+        <p class="signature">With love,<br>Dough Bunny <svg aria-hidden="true"><use href="#d-heart-fill"/></svg></p>
+      </div>
+    </div>
+
+    <!-- TODO: replace sample testimonials with real customer reviews -->
+    <div class="notes-head reveal">
+      <h3>Little love notes <span>from our neighbors</span></h3>
     </div>
     <div class="note-grid">
-      <figure class="love-note reveal">
+      <figure class="love-note reveal" style="--tilt:-2.5deg">
+        <span class="tape tape--top" aria-hidden="true"></span>
         <blockquote>"You can genuinely taste that these are homemade. The chocolate chip cookies are the best I've had, hands down!"</blockquote>
         <figcaption>— Maren T. ♡</figcaption>
       </figure>
-      <figure class="love-note reveal">
+      <figure class="love-note love-note--pink reveal" style="--tilt:1.5deg">
+        <span class="tape tape--top tape--butter" aria-hidden="true"></span>
         <blockquote>"Ordered the s'mores and strawberry shortcake for a party and they disappeared in minutes. Guests are still asking!"</blockquote>
         <figcaption>— Alex &amp; Priya</figcaption>
       </figure>
-      <figure class="love-note reveal">
+      <figure class="love-note reveal" style="--tilt:-1deg">
+        <span class="tape tape--top tape--pink" aria-hidden="true"></span>
         <blockquote>"They taste like someone who loves you baked them. My kids can't get enough — and I love what goes in them."</blockquote>
         <figcaption>— Jordan K. ♡</figcaption>
       </figure>
@@ -328,115 +425,148 @@
   </div>
 </section>
 
-<!-- ============ GALLERY ============ -->
-<section class="gallery section" id="gallery">
+<!-- ============ HOW TO ORDER + ORDER ============ -->
+<section class="order-zone torn-top" id="how">
+  <img src="assets/graphics/web/baking-tools/whisk.webp" alt="" class="oz-sticker oz-whisk" aria-hidden="true" loading="lazy" width="234" height="360">
+  <img src="assets/graphics/web/baking-tools/rolling-pin.webp" alt="" class="oz-sticker oz-pin" aria-hidden="true" loading="lazy" width="756" height="556">
+  <img src="assets/graphics/web/ingredients/cookie-bitten.webp" alt="" class="oz-sticker oz-cookie" aria-hidden="true" loading="lazy" width="360" height="352">
+  <img src="assets/graphics/web/baking-tools/oven-mitt.webp" alt="" class="oz-sticker oz-mitt" aria-hidden="true" loading="lazy" width="271" height="360">
+  <svg class="oz-doodle oz-star-1" aria-hidden="true"><use href="#d-star"/></svg>
+  <svg class="oz-doodle oz-star-2" aria-hidden="true"><use href="#d-star"/></svg>
+  <svg class="oz-doodle oz-heart" aria-hidden="true"><use href="#d-heart"/></svg>
+
   <div class="container">
-    <div class="section-head section-head--left reveal">
-      <p class="eyebrow">Snapshots from our kitchen</p>
-      <h2>A day in the life of <span class="love">Dough Bunny.</span></h2>
-    </div>
-  </div>
-  <div class="bunny-rail" tabindex="0" aria-label="Snapshots of Dough Bunny baking">
-    <figure class="snapshot"><img src="assets/graphics/web/bunny/bunny-mixing-wink.png" alt="Dough Bunny mixing cookie dough with a wink" loading="lazy"><figcaption>whisking up something sweet</figcaption></figure>
-    <figure class="snapshot"><img src="assets/graphics/web/bunny/bunny-piping-frosting.png" alt="Dough Bunny piping frosting onto cookies" loading="lazy"><figcaption>frosting by hand</figcaption></figure>
-    <figure class="snapshot"><img src="assets/graphics/web/bunny/bunny-holding-tray.png" alt="Dough Bunny holding a tray of fresh cookies" loading="lazy"><figcaption>warm from the oven</figcaption></figure>
-    <figure class="snapshot"><img src="assets/graphics/web/bunny/bunny-spoon-cookie.png" alt="Dough Bunny holding a spoon and a cookie" loading="lazy"><figcaption>taste-testing (for quality!)</figcaption></figure>
-    <figure class="snapshot"><img src="assets/graphics/web/bunny/bunny-sitting-eating.png" alt="Dough Bunny sitting and enjoying a cookie" loading="lazy"><figcaption>the best part of the job</figcaption></figure>
-    <figure class="snapshot"><img src="assets/graphics/web/bunny/bunny-waving.png" alt="Dough Bunny waving hello" loading="lazy"><figcaption>see you at pickup!</figcaption></figure>
-  </div>
-</section>
-
-<!-- ============ ORDER ============ -->
-<section class="order section" id="order">
-  <div class="container order-grid">
-    <div class="order-copy reveal">
-      <p class="eyebrow">Order ahead</p>
-      <h2>Let us bake something <span class="love">for you.</span></h2>
-      <p>Tell us your favorite flavors and how many dozen, and we'll get back to you to confirm pickup or delivery. Baking for a birthday, a thank-you, or a just-because? Let us know — we love hearing who it's for.</p>
-      <ul class="order-details">
-        <li><span>Lead time</span><strong>48–72 hours preferred</strong></li>
-        <li><span>Pickup area</span><strong>Your Town, FL &amp; nearby</strong></li>
-        <li><span>Phone</span><strong><a href="tel:+15551234567">(555) 123-4567</a></strong></li>
-        <li><span>Email</span><strong><a href="mailto:hello@doughbunny.com">hello@doughbunny.com</a></strong></li>
-      </ul>
-      <img src="assets/graphics/web/bunny/bunny-sitting-eating.png" alt="" class="order-bunny" aria-hidden="true" loading="lazy">
+    <div class="section-head section-head--light reveal">
+      <p class="hand-label">how to order</p>
+      <h2>Baked just <span class="script-accent">for you.</span></h2>
+      <p class="section-lede">Because everything is homemade, there's no walk-in shop — each box is baked to order for local pickup or delivery.</p>
     </div>
 
-    <form class="order-form reveal" id="orderForm" novalidate>
-      <img src="assets/graphics/web/decorative/ribbon-bow.png" alt="" class="form-bow" aria-hidden="true">
-      <p class="form-title">Your cookie order</p>
-      <div class="field-row">
-        <label class="field"><span>Name</span><input type="text" name="name" autocomplete="name" required></label>
-        <label class="field"><span>Email</span><input type="email" name="email" autocomplete="email" required></label>
-      </div>
-      <div class="field-row">
-        <label class="field"><span>Phone <em>(optional)</em></span><input type="tel" name="phone" autocomplete="tel"></label>
-        <label class="field"><span>Pickup date</span><input type="date" name="date" id="pickupDate" required></label>
-      </div>
-      <fieldset class="field flavors">
-        <legend>Flavors</legend>
-        <div class="chips">
-          <label><input type="checkbox" name="flavors" value="Chocolate Chip"><span>Chocolate Chip</span></label>
-          <label><input type="checkbox" name="flavors" value="Strawberry Shortcake"><span>Strawberry Shortcake</span></label>
-          <label><input type="checkbox" name="flavors" value="Frosted Butter Cut-Out"><span>Frosted Cut-Out</span></label>
-          <label><input type="checkbox" name="flavors" value="Natilla Snickerdoodle"><span>Natilla Snickerdoodle</span></label>
-          <label><input type="checkbox" name="flavors" value="Banana Pudding"><span>Banana Pudding</span></label>
-          <label><input type="checkbox" name="flavors" value="Brownie Crispy-Top"><span>Brownie Crispy-Top</span></label>
-          <label><input type="checkbox" name="flavors" value="S'mores"><span>S'mores</span></label>
+    <ol class="steps">
+      <li class="step reveal" style="--tilt:-2deg">
+        <span class="step-num">step one</span>
+        <img src="assets/graphics/web/ingredients/cookie-stack-ribbon.webp" alt="" loading="lazy" width="360" height="334">
+        <h3>Pick your favorites</h3>
+        <p>Choose one flavor or build a mixed dozen from the cookie jar.</p>
+      </li>
+      <li class="step reveal" style="--tilt:1.5deg">
+        <span class="step-num">step two</span>
+        <img src="assets/graphics/web/baking-tools/mixing-bowl.webp" alt="" loading="lazy" width="360" height="272">
+        <h3>We bake with love</h3>
+        <p>Give us 48–72 hours' notice. We'll confirm your order, then mix and bake it fresh.</p>
+      </li>
+      <li class="step reveal" style="--tilt:-1deg">
+        <span class="step-num">step three</span>
+        <img src="assets/graphics/web/decorative/ribbon-bow.webp" alt="" loading="lazy" width="388" height="356">
+        <h3>Share the love</h3>
+        <p>Pick up your box fresh from our kitchen, or we'll arrange local delivery nearby.</p>
+      </li>
+    </ol>
+
+    <div class="order-grid" id="order">
+      <div class="order-copy reveal">
+        <p class="hand-label">order ahead</p>
+        <h2>Let us bake something <span class="script-accent">for you.</span></h2>
+        <p>Tell us your favorite flavors and how many dozen, and we'll get back to you to confirm pickup or delivery. Baking for a birthday, a thank-you, or a just-because? We love hearing who it's for.</p>
+        <div class="kraft-tag" style="--tilt:-2deg">
+          <ul class="order-details">
+            <li><span>Lead time</span><strong>48–72 hours preferred</strong></li>
+            <li><span>Pickup area</span><strong>Your Town, FL &amp; nearby</strong></li>
+            <li><span>Phone</span><strong><a href="tel:+15551234567">(555) 123-4567</a></strong></li>
+            <li><span>Email</span><strong><a href="mailto:hello@doughbunny.com">hello@doughbunny.com</a></strong></li>
+          </ul>
         </div>
-      </fieldset>
-      <div class="field-row">
-        <label class="field"><span>Quantity</span>
-          <select name="quantity">
-            <option>Half dozen</option>
-            <option selected>1 dozen</option>
-            <option>2 dozen</option>
-            <option>3+ dozen / event</option>
-          </select>
-        </label>
-        <label class="field"><span>Fulfillment</span>
-          <select name="fulfillment">
-            <option>Pickup</option>
-            <option>Local delivery</option>
-          </select>
-        </label>
+        <p class="order-hand" aria-hidden="true">we can't wait to<br>bake for you! <svg><use href="#d-arrow"/></svg></p>
       </div>
-      <label class="field"><span>Who's it for? Notes &amp; allergies</span><textarea name="message" rows="3" placeholder="A birthday, a thank-you, allergies we should know about…"></textarea></label>
-      <button type="submit" class="btn btn-primary btn-block">Send Order Request <span aria-hidden="true">♡</span></button>
-      <p class="form-note" id="formNote" role="status"></p>
-    </form>
+
+      <form class="order-form reveal" id="orderForm" novalidate style="--tilt:.6deg">
+        <span class="tape tape--tl tape--pink" aria-hidden="true"></span>
+        <span class="tape tape--tr tape--butter" aria-hidden="true"></span>
+        <p class="form-title">Your cookie order <svg aria-hidden="true"><use href="#d-heart-fill"/></svg></p>
+        <div class="field-row">
+          <label class="field"><span>Name</span><input type="text" name="name" autocomplete="name" required></label>
+          <label class="field"><span>Email</span><input type="email" name="email" autocomplete="email" required></label>
+        </div>
+        <div class="field-row">
+          <label class="field"><span>Phone <em>(optional)</em></span><input type="tel" name="phone" autocomplete="tel"></label>
+          <label class="field"><span>Pickup date</span><input type="date" name="date" id="pickupDate" required></label>
+        </div>
+        <fieldset class="field flavors">
+          <legend>Flavors</legend>
+          <div class="chips">
+            <label><input type="checkbox" name="flavors" value="Chocolate Chip"><span>Chocolate Chip</span></label>
+            <label><input type="checkbox" name="flavors" value="Strawberry Shortcake"><span>Strawberry Shortcake</span></label>
+            <label><input type="checkbox" name="flavors" value="Frosted Butter Cut-Out"><span>Frosted Cut-Out</span></label>
+            <label><input type="checkbox" name="flavors" value="Natilla Snickerdoodle"><span>Natilla Snickerdoodle</span></label>
+            <label><input type="checkbox" name="flavors" value="Banana Pudding"><span>Banana Pudding</span></label>
+            <label><input type="checkbox" name="flavors" value="Brownie Crispy-Top"><span>Brownie Crispy-Top</span></label>
+            <label><input type="checkbox" name="flavors" value="S'mores"><span>S'mores</span></label>
+          </div>
+        </fieldset>
+        <div class="field-row">
+          <label class="field"><span>Quantity</span>
+            <select name="quantity">
+              <option>Half dozen</option>
+              <option selected>1 dozen</option>
+              <option>2 dozen</option>
+              <option>3+ dozen / event</option>
+            </select>
+          </label>
+          <label class="field"><span>Fulfillment</span>
+            <select name="fulfillment">
+              <option>Pickup</option>
+              <option>Local delivery</option>
+            </select>
+          </label>
+        </div>
+        <label class="field"><span>Who's it for? Notes &amp; allergies</span><textarea name="message" rows="3" placeholder="A birthday, a thank-you, allergies we should know about…"></textarea></label>
+        <button type="submit" class="btn btn-primary btn-block">Send Order Request <svg aria-hidden="true"><use href="#d-heart-fill"/></svg></button>
+        <p class="form-note" id="formNote" role="status"></p>
+      </form>
+    </div>
   </div>
 </section>
 
 </main>
 
 <!-- ============ FOOTER ============ -->
-<footer class="site-footer">
+<footer class="site-footer paper">
   <div class="container footer-inner">
     <div class="footer-brand">
-      <img src="assets/images/logo-wordmark.png" alt="Dough Bunny — Cookies &amp; Treats" class="footer-logo" loading="lazy" width="500" height="500">
-      <p>Homemade cookies &amp; treats, mixed and baked by hand in our home kitchen. <span class="footer-script">Made with love ♡</span></p>
+      <img src="assets/images/logo-wordmark.webp" alt="Dough Bunny — Cookies &amp; Treats" class="footer-logo" loading="lazy" width="1200" height="1200">
+      <div>
+        <p>Homemade cookies &amp; treats, mixed and baked by hand in our Florida home kitchen.</p>
+        <p class="footer-script">made with love ♡</p>
+      </div>
     </div>
     <div class="footer-col">
       <h4>Explore</h4>
-      <a href="#kitchen">Our Kitchen</a>
-      <a href="#recipe">Made by Hand</a>
       <a href="#menu">Cookies</a>
+      <a href="#recipe">Made by Hand</a>
+      <a href="#kitchen">Our Kitchen</a>
       <a href="#how">How to Order</a>
     </div>
     <div class="footer-col">
-      <h4>Say Hello</h4>
+      <h4>Say hello</h4>
       <a href="mailto:hello@doughbunny.com">hello@doughbunny.com</a>
       <a href="tel:+15551234567">(555) 123-4567</a>
       <a href="#">Instagram</a>
       <a href="#">Facebook</a>
     </div>
+    <svg class="stamp stamp--footer" aria-hidden="true"><use href="#d-stamp"/></svg>
   </div>
   <div class="container footer-bottom">
     <p>&copy; <span id="year"></span> Dough Bunny. Homemade with love.</p>
     <p>Made in a cottage food operation that is not subject to Florida's food safety regulations.</p>
   </div>
 </footer>
+
+<a href="#order" class="box-pill" id="boxPill" hidden>
+  <img src="assets/graphics/web/ingredients/cookie-whole.webp" alt="" width="360" height="352">
+  <span id="boxPillText">1 flavor in your box</span>
+  <span aria-hidden="true">→</span>
+</a>
+<p class="sr-only" id="boxStatus" role="status" aria-live="polite"></p>
 
 <script src="js/cookies.js"></script>
 <script src="js/main.js"></script>

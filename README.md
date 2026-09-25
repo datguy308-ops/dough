@@ -4,19 +4,12 @@ Website for Dough Bunny, a Florida home bakery making homemade cookies & treats 
 
 ## Structure
 
-- `index.html` — single-page site (hero, our kitchen letter, recipe card & "never" sticky note, cookie menu, how to order, love-note testimonials, snapshot gallery, order form)
-- `css/style.css` — homemade look: lavender/cream/blush palette from the logo, gingham, lined paper, washi-tape snapshots, stitched borders; Fraunces + Manrope + Caveat (handwritten) type. The `.love` class gives any phrase the hand-drawn underline + heart.
+- `index.html` — single-page site, laid out like pages of a bakery scrapbook: hero collage, What's Baking (spotlight + tags), the cookie jar (recipe-card tiles), Made by Hand (recipe card, sticky note, polaroids), Our Kitchen (letter + love notes), How to Order + order form (deep purple page), footer. A hidden SVG sprite at the top holds the hand-drawn doodles and the "Baked with love · Est. 2026" stamp.
+- `css/style.css` — design tokens (cream / deep purple / lavender / pink / butter / cookie brown), Fraunces + Caveat + Nunito Sans, paper grain, torn page edges, gingham, washi tape, paper shadows. Paper objects tilt via `--tilt` (the `rotate` property) so reveals (`translate`) never fight with it.
 - `js/cookies.js` — draws the illustrated SVG cookie for each flavor (`data-cookie="choc|strawberry|cutout|snicker|banana|brownie|smores"`)
-- `js/main.js` — header, mobile nav, scroll reveal, hero parallax, order form validation
-- `assets/images/logo.jpg` — round brand mark; `assets/images/logo-wordmark.png` — full logo with wordmark (transparent)
-- `assets/graphics/` — illustration library (see its README)
-
-## Before launch
-
-- Replace placeholder prices, phone, email, pickup area, and social links
-- Replace the sample testimonials with real customer reviews
-- Personalize the "Our Kitchen" letter with the baker's real story
-- Connect the order form to a form service or email (it currently only shows a confirmation message)
+- `js/main.js` — header, mobile nav, scroll reveal, hero parallax, "Add a little love" buttons synced with the order form + floating box sticker, order form validation
+- `assets/images/` — `logo.jpg` (round brand mark), `logo-wordmark.webp` (full logo, upscaled), favicon / touch icon / og image; `original/` keeps the source logo
+- `assets/graphics/` — illustration library (see its README for the upscaling pipeline)
 
 ## Running locally
 
