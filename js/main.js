@@ -55,23 +55,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // ---------- Testimonials ----------
-  const quotes = document.querySelectorAll('#quotes .quote');
-  const dots = document.querySelectorAll('.quote-dots button');
-  let current = 0, timer;
-  const show = (i) => {
-    current = i;
-    quotes.forEach((q, n) => q.classList.toggle('is-active', n === i));
-    dots.forEach((d, n) => d.setAttribute('aria-selected', String(n === i)));
-  };
-  const start = () => {
-    if (reduceMotion) return;
-    clearInterval(timer);
-    timer = setInterval(() => show((current + 1) % quotes.length), 6500);
-  };
-  dots.forEach((d, n) => d.addEventListener('click', () => { show(n); start(); }));
-  start();
-
   // ---------- Order form ----------
   const dateInput = document.getElementById('pickupDate');
   if (dateInput) {
@@ -100,7 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Static site: no backend yet. Hook this up to a form service or email when ready.
     const name = form.elements.name.value.trim().split(' ')[0];
-    formNote.textContent = `Thank you, ${name}! We'll be in touch shortly to confirm your order.`;
+    formNote.textContent = `Thank you, ${name}! We'll be in touch soon to confirm your order ♡`;
     form.reset();
   });
 
