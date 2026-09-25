@@ -55,47 +55,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // ---------- Cookie box: "Add a little love" buttons <-> order form ----------
+  // ---------- Order form (the box itself lives in js/box.js) ----------
   const form = document.getElementById('orderForm');
-  const flavorBoxes = [...form.querySelectorAll('input[name="flavors"]')];
-  const addButtons = [...document.querySelectorAll('.add-love')];
-  const pill = document.getElementById('boxPill');
-  const pillText = document.getElementById('boxPillText');
-  const status = document.getElementById('boxStatus');
-  const boxFor = (flavor) => flavorBoxes.find(b => b.value === flavor);
-
-  const syncBox = () => {
-    const chosen = flavorBoxes.filter(b => b.checked).map(b => b.value);
-    addButtons.forEach(btn => {
-      const inBox = chosen.includes(btn.dataset.flavor);
-      btn.setAttribute('aria-pressed', String(inBox));
-      btn.querySelector('.add-label').textContent = inBox ? 'In your box' : 'Add a little love';
-    });
-    pill.hidden = chosen.length === 0;
-    pillText.textContent = `${chosen.length} ${chosen.length === 1 ? 'flavor' : 'flavors'} in your box`;
-  };
-
-  addButtons.forEach(btn => btn.addEventListener('click', () => {
-    const box = boxFor(btn.dataset.flavor);
-    if (!box) return;
-    box.checked = !box.checked;
-    status.textContent = box.checked
-      ? `${box.value} added to your cookie box.`
-      : `${box.value} removed from your cookie box.`;
-    syncBox();
-  }));
-  flavorBoxes.forEach(b => b.addEventListener('change', syncBox));
-
-  // hide the pill while the order form itself is on screen
-  if ('IntersectionObserver' in window) {
-    new IntersectionObserver(([entry]) => {
-      pill.classList.toggle('is-away', entry.isIntersecting);
-      pill.style.visibility = entry.isIntersecting ? 'hidden' : '';
-    }, { threshold: 0.2 }).observe(form);
-  }
-  syncBox();
-
-  // ---------- Order form ----------
   const dateInput = document.getElementById('pickupDate');
   if (dateInput) {
     const min = new Date(Date.now() + 2 * 864e5);
@@ -108,26 +69,66 @@ document.addEventListener('DOMContentLoaded', () => {
     formNote.classList.remove('is-error');
     form.querySelectorAll('[aria-invalid]').forEach(f => f.removeAttribute('aria-invalid'));
 
+    // Re-validate the box from the saved model at submit time — the disabled
+    // button is only a hint, this is the actual check.
+    const box = window.DoughBox.validate(window.DoughBox.items);
     const missing = [...form.querySelectorAll('[required]')].filter(f => !f.value.trim());
     const email = form.elements.email;
     const badEmail = !missing.includes(email) && !email.checkValidity();
-    const flavors = flavorBoxes.filter(b => b.checked);
 
-    if (missing.length || badEmail || !flavors.length) {
+    if (!box.ok) {
+      formNote.classList.add('is-error');
+      formNote.textContent = box.cookies === 0
+        ? `Your box is empty — add at least ${window.DoughBox.MIN_COOKIES} cookies.`
+        : `Your box needs ${box.missing} more ${box.missing === 1 ? 'cookie' : 'cookies'} (minimum ${window.DoughBox.MIN_COOKIES}).`;
+      const firstAdd = form.querySelector('.builder-list .step-btn--add');
+      firstAdd && firstAdd.focus();
+      return;
+    }
+    if (missing.length || badEmail) {
       missing.concat(badEmail ? [email] : []).forEach(f => f.setAttribute('aria-invalid', 'true'));
       formNote.classList.add('is-error');
-      formNote.textContent = !flavors.length && !missing.length && !badEmail
-        ? 'Pick at least one flavor so we know what to bake!'
-        : 'Please fill in your name, a valid email, and a pickup date.';
-      (missing[0] || (badEmail && email) || flavorBoxes[0]).focus();
+      formNote.textContent = 'Please fill in your name, a valid email, and a pickup date.';
+      (missing[0] || email).focus();
       return;
     }
 
-    // Static site: no backend yet. Hook this up to a form service or email when ready.
-    const name = form.elements.name.value.trim().split(' ')[0];
-    formNote.textContent = `Thank you, ${name}! We'll be in touch soon to confirm your order ♡`;
+    // The order keeps the exact flavor breakdown, not just a count.
+    const order = {
+      name: form.elements.name.value.trim(),
+      email: email.value.trim(),
+      phone: form.elements.phone.value.trim(),
+      pickupDate: form.elements.date.value,
+      fulfillment: form.elements.fulfillment.value,
+      notes: form.elements.message.value.trim(),
+      box: box.lines,                 // [{ flavor, qty }, ...]
+      totalCookies: box.cookies,
+      totalFlavors: box.flavors
+    };
+
+    // Static site: no backend yet. When a form service/email is connected, send `order`
+    // (the hidden "box" field already carries the breakdown as text for plain form posts).
+    window.lastOrderRequest = order;
+
+    const first = order.name.split(' ')[0];
+    formNote.innerHTML = '';
+    const thanks = document.createElement('span');
+    thanks.textContent = `Thank you, ${first}! We'll be in touch soon to confirm your order ♡`;
+    const receipt = document.createElement('ul');
+    receipt.className = 'order-receipt';
+    order.box.forEach(l => {
+      const li = document.createElement('li');
+      li.textContent = `${l.qty} × ${l.flavor}`;
+      receipt.append(li);
+    });
+    const tot = document.createElement('li');
+    tot.className = 'order-receipt-total';
+    tot.textContent = `${order.totalCookies} cookies · ${order.totalFlavors} ${order.totalFlavors === 1 ? 'flavor' : 'flavors'}`;
+    receipt.append(tot);
+    formNote.append(thanks, receipt);
+
     form.reset();
-    syncBox();
+    window.DoughBox.clear();
   });
 
 });

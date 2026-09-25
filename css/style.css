@@ -164,8 +164,6 @@ h3 { font-size: 1.35rem; }
 .add-love { --bg: var(--paper); --fg: var(--plum); --edge: var(--plum); --pop: var(--pink); }
 .add-love::before { border-color: var(--lav-soft); }
 .add-love svg { color: var(--pink-deep); }
-.add-love[aria-pressed="true"] { --bg: var(--pink); --edge: var(--plum); --pop: var(--plum); }
-.add-love[aria-pressed="true"] svg { color: var(--plum); animation: pop .45s var(--ease); }
 @keyframes pop { 0% { scale: .4; } 60% { scale: 1.35; } 100% { scale: 1; } }
 
 /* ---------- Paper-object kit ---------- */
@@ -463,7 +461,7 @@ main > section, .site-footer { overflow-x: clip; }
 .tile-foot { display: grid; gap: 12px; padding-top: 12px; border-top: 1.5px dashed var(--line); }
 .price { margin: 0; font-family: var(--font-display); font-size: 1.3rem; font-weight: 550; color: var(--plum); }
 .price small { font-family: var(--font-body); font-size: .8rem; font-weight: 600; color: var(--muted); margin-left: 4px; }
-.tile-foot .add-love { width: 100%; }
+.tile-foot .add-love, .tile-foot .stepper { width: 100%; }
 
 .mix-note {
   position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
@@ -699,20 +697,6 @@ main > section, .site-footer { overflow-x: clip; }
 .field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: var(--lav); background: #fff; box-shadow: 0 0 0 4px var(--lav-tint); }
 .field input[aria-invalid="true"] { border-color: #C0506E; }
 
-.chips { display: flex; flex-wrap: wrap; gap: 8px; }
-.chips label { position: relative; cursor: pointer; }
-.chips input { position: absolute; opacity: 0; inset: 0; cursor: pointer; }
-.chips span {
-  display: inline-flex; align-items: center; gap: 6px;
-  padding: 9px 15px; border-radius: 8px 10px 9px 11px; font-size: .9rem; font-weight: 700;
-  background: var(--cream); color: var(--plum); border: 1.5px dashed var(--lav-soft);
-  transition: background .2s, color .2s, border-color .2s, rotate .25s var(--ease);
-}
-.chips label:hover span { border-color: var(--lav); }
-.chips input:checked + span { background: var(--plum); color: var(--cream); border-style: solid; border-color: var(--plum); rotate: -2deg; box-shadow: 2px 2px 0 var(--pink); }
-.chips input:checked + span::before { content: '♥'; color: var(--pink); font-size: .85em; }
-.chips input:focus-visible + span { outline: 3px solid var(--lav); outline-offset: 2px; }
-
 .order-form .btn { margin-top: 6px; padding: 1.1em 2em; font-size: 1rem; position: relative; z-index: 1; }
 .form-note { position: relative; z-index: 1; margin: 14px 0 0; min-height: 1.4em; text-align: center; font-family: var(--font-hand); font-size: 1.5rem; font-weight: 700; line-height: 1.1; color: var(--lav-ink); }
 .form-note.is-error { color: #A83A5A; }
@@ -752,6 +736,134 @@ main > section, .site-footer { overflow-x: clip; }
 .box-pill[hidden] { display: none; }
 .box-pill img { width: 34px; height: 34px; }
 @keyframes settle { from { opacity: 0; translate: 0 20px; rotate: 6deg; } }
+
+
+/* ==========================================================================
+   BUILD YOUR BOX — steppers, card states, form builder, summary panel
+   ========================================================================== */
+.box-control { display: grid; gap: 6px; justify-items: stretch; }
+.box-control [hidden] { display: none !important; }
+.spotlight .box-control { justify-items: start; }
+
+.stepper {
+  display: inline-grid; grid-template-columns: 44px minmax(44px, 1fr) 44px; align-items: center;
+  background: var(--paper);
+  border: 2px solid var(--plum);
+  border-radius: 12px 15px 11px 14px;
+  box-shadow: 2px 3px 0 var(--pink);
+  padding: 3px;
+  animation: pop-in .35s var(--ease);
+}
+@keyframes pop-in { from { scale: .92; opacity: .4; } }
+.step-btn {
+  width: 44px; height: 40px; display: grid; place-items: center;
+  border: 0; border-radius: 9px 11px 8px 10px;
+  background: var(--lav-tint); color: var(--plum);
+  font: 800 1.35rem/1 var(--font-body);
+  cursor: pointer;
+  transition: background .2s, color .2s, scale .15s var(--ease);
+}
+.step-btn:hover:not(:disabled) { background: var(--pink); }
+.step-btn:active:not(:disabled) { scale: .9; }
+.step-btn:disabled { opacity: .35; cursor: not-allowed; }
+.step-btn--add { background: var(--plum); color: var(--cream); }
+.step-btn--add:hover:not(:disabled) { background: var(--lav); color: #fff; }
+.step-count { text-align: center; font-family: var(--font-display); font-weight: 600; font-size: 1.35rem; color: var(--plum); line-height: 1; }
+.qty-num { display: inline-block; min-width: 1.4ch; }
+.stepper--sm { grid-template-columns: 36px 40px 36px; box-shadow: 2px 2px 0 var(--pink); border-width: 1.5px; }
+.stepper--sm .step-btn { width: 36px; height: 34px; font-size: 1.15rem; }
+.stepper--sm .step-count { font-size: 1.15rem; }
+
+.added-note {
+  display: none; align-items: center; justify-content: center; gap: 5px; margin: 2px 0 0;
+  font-family: var(--font-hand); font-size: 1.25rem; font-weight: 700; line-height: 1; color: var(--pink-deep);
+  rotate: -2deg;
+}
+.added-note svg { width: 13px; height: 13px; }
+.box-control.has-qty .added-note { display: flex; }
+.spotlight .added-note { justify-content: flex-start; }
+
+/* a card with cookies in the box gets a little "in the box" glow + heart sticker */
+.recipe-tile.in-box, .spotlight.in-box { box-shadow: var(--shadow-paper), 0 0 0 2.5px var(--pink); }
+.recipe-tile.in-box::after, .spotlight.in-box .spotlight-art::after {
+  content: '♥'; position: absolute; z-index: 3;
+  display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%;
+  background: var(--pink); color: var(--plum); font-size: .95rem;
+  box-shadow: 1px 2px 0 var(--plum);
+  animation: pop .45s var(--ease);
+}
+.recipe-tile.in-box::after { top: 12px; left: 12px; rotate: -12deg; }
+.spotlight.in-box .spotlight-art::after { top: 2%; right: 4%; }
+@keyframes pop { 0% { scale: .4; } 60% { scale: 1.25; } 100% { scale: 1; } }
+
+/* order form builder */
+.box-builder legend { display: flex; align-items: center; gap: 6px; font-family: var(--font-hand); font-size: 1.7rem; font-weight: 700; letter-spacing: 0; text-transform: none; color: var(--lav); margin-bottom: 2px; }
+.box-builder legend svg { width: 16px; height: 16px; color: var(--pink-deep); }
+.builder-hint { font-size: .9rem; color: var(--muted); margin: 0 0 10px; }
+.builder-list {
+  display: grid; grid-template-columns: 1fr; gap: 0;
+  background: var(--cream); background-position: 0 -1px;
+  border: 1.5px dashed var(--lav-soft); border-radius: 8px; padding: 6px 14px;
+}
+.builder-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 7px 0; border-bottom: 1px dashed var(--line); }
+.builder-row:last-child { border-bottom: 0; }
+.builder-name { font-weight: 700; font-size: .95rem; color: var(--muted); transition: color .2s; }
+.builder-row.has-qty .builder-name { color: var(--plum); }
+.builder-row.has-qty .builder-name::before { content: '♥ '; color: var(--pink-deep); }
+.builder-total { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 16px; margin-top: 12px; }
+.builder-total p { margin: 0; }
+#boxTotal strong { font-family: var(--font-display); font-size: 1.2rem; color: var(--plum); }
+#boxTotal span { color: var(--muted); font-weight: 600; font-size: .92rem; }
+.builder-min { font-family: var(--font-hand); font-size: 1.4rem; font-weight: 700; color: var(--pink-deep); line-height: 1.1; }
+.builder-min.is-ok { color: var(--lav-ink); }
+.builder-event { align-self: end; font-size: .88rem; color: var(--muted); margin-bottom: 20px !important; }
+.btn:disabled { opacity: .55; cursor: not-allowed; translate: 0 0 !important; rotate: 0deg !important; box-shadow: 2px 2px 0 var(--lav-soft) !important; }
+
+.order-receipt { margin: 10px auto 0; padding: 12px 18px; max-width: 320px; text-align: left; background: var(--lav-tint); border-radius: 6px; font-family: var(--font-body); font-size: .95rem; font-weight: 700; color: var(--plum); }
+.order-receipt li { padding: 2px 0; }
+.order-receipt-total { margin-top: 6px; padding-top: 6px !important; border-top: 1.5px dashed var(--lav-soft); color: var(--lav-ink); }
+
+/* floating sticker states */
+.box-pill { border: 0; cursor: pointer; font-family: var(--font-body); }
+.box-pill.is-short { background: var(--paper); color: var(--plum); box-shadow: 3px 4px 0 var(--pink), inset 0 0 0 2px var(--plum), 0 12px 24px -10px rgba(0,0,0,.35); }
+.box-pill.is-away { opacity: 0; pointer-events: none; translate: 0 16px; }
+.box-pill { transition: rotate .3s var(--ease), opacity .3s, translate .3s var(--ease); }
+
+/* summary panel (non-modal; quantities stay editable on the cards) */
+.box-panel {
+  position: fixed; right: 20px; bottom: 86px; z-index: 95;
+  width: min(360px, calc(100vw - 24px));
+  background-color: var(--paper); background-image: var(--lined), var(--grain); background-position: 0 70px, 0 0;
+  padding: 28px 24px 22px;
+  border-radius: 4px;
+  box-shadow: 3px 4px 3px rgba(80,50,30,.1), 10px 30px 50px -20px rgba(73, 48, 96, .55);
+  rotate: -1deg;
+  animation: settle .4s var(--ease);
+}
+.box-panel[hidden] { display: none; }
+.box-panel-close { position: absolute; top: 8px; right: 10px; width: 36px; height: 36px; border: 0; background: none; font-size: 1.6rem; line-height: 1; color: var(--muted); cursor: pointer; border-radius: 8px; }
+.box-panel-close:hover { background: var(--lav-tint); color: var(--plum); }
+.box-panel-title { display: flex; align-items: center; gap: 8px; font-family: var(--font-hand); font-size: 2rem; font-weight: 700; color: var(--lav); margin: 0 0 10px; line-height: 1; }
+.box-panel-title svg { width: 18px; height: 18px; color: var(--pink-deep); }
+.box-panel-title:focus { outline: none; }
+.box-panel-list li { font-family: var(--font-hand); font-size: 1.5rem; font-weight: 600; line-height: 1.33; color: var(--ink); }
+.bp-qty { display: inline-block; min-width: 2.2ch; font-family: var(--font-display); font-size: 1.05rem; font-weight: 700; color: var(--plum); }
+.bp-empty { font-family: var(--font-body) !important; font-size: .95rem !important; color: var(--muted) !important; }
+.box-panel-totals { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; margin-top: 10px; padding-top: 10px; border-top: 2px dashed var(--lav-soft); }
+.box-panel-totals strong { font-family: var(--font-display); font-size: 1.25rem; color: var(--plum); }
+.box-panel-totals span { font-weight: 700; color: var(--muted); font-size: .92rem; }
+.box-panel-msg { font-family: var(--font-hand); font-size: 1.35rem; font-weight: 700; color: var(--pink-deep); margin: 6px 0 14px; }
+.box-panel-msg.is-ok { color: var(--lav-ink); }
+.box-panel-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.box-panel-actions .btn { padding-left: .6em; padding-right: .6em; }
+
+@media (max-width: 680px) {
+  .box-panel { right: 12px; bottom: 76px; }
+  .box-panel-actions { grid-template-columns: 1fr; }
+  .spotlight .box-control { justify-items: center; }
+  .spotlight .added-note { justify-content: center; }
+  .tile-foot .stepper { width: 100%; }
+}
 
 /* ==========================================================================
    RESPONSIVE
@@ -840,6 +952,7 @@ main > section, .site-footer { overflow-x: clip; }
   .tile-desc { font-size: .9rem; }
   .tile-foot { grid-column: 1 / -1; }
   .recipe-tile .label-chip { right: auto; left: 12px; top: -12px; rotate: -3deg; }
+  .recipe-tile:has(.label-chip) .tape--top { left: 80%; }
   .mix-note { padding: 34px 20px 26px; }
 
   .recipe-card { padding-left: 42px; padding-right: 20px; }
