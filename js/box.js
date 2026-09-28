@@ -9,7 +9,7 @@
    - a box holds exactly 4, 6, or 12 cookies in total, mixed freely
    - 12 is the most a customer can order
    - prices are per large cookie and already include sales tax
-   - every order is delivered (no pickup): $1 per mile, once per order, up to 15 miles away
+   - every order is delivered (no pickup): $1 per mile, once per order, up to 20 miles away
    - money is handled in whole cents
    ========================================================================== */
 (function () {
@@ -39,7 +39,7 @@
   const BOX_SIZES = [4, 6, 12];
   const MAX_COOKIES = BOX_SIZES[BOX_SIZES.length - 1];
   const DELIVERY_PER_MILE = 100;          // cents; local delivery is $1 per mile, per order
-  const MAX_DELIVERY_MILES = 15;          // we don't deliver farther than this
+  const MAX_DELIVERY_MILES = 20;          // we don't deliver farther than this
   const STORAGE_KEY = 'doughbunny.box.v1';
 
   const money = (cents) => `$${(cents / 100).toFixed(2)}`;

@@ -63,7 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
     dateInput.min = min.toISOString().slice(0, 10);
   }
 
-  // ---------- Delivery ($1 per mile, per order, max 15 mi) + live order total ----------
+  // ---------- Delivery ($1 per mile, per order, max 20 mi) + live order total ----------
   // Every order is delivered; there is no pickup option.
   const DB = window.DoughBox;
   const addressInput = document.getElementById('deliveryAddress');
