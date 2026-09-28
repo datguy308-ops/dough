@@ -57,40 +57,41 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ---------- Order form (the box itself lives in js/box.js) ----------
   const form = document.getElementById('orderForm');
-  const dateInput = document.getElementById('pickupDate');
+  const dateInput = document.getElementById('deliveryDate');
   if (dateInput) {
     const min = new Date(Date.now() + 2 * 864e5);
     dateInput.min = min.toISOString().slice(0, 10);
   }
 
-  // ---------- Delivery ($1 per mile, per order) + live order total ----------
+  // ---------- Delivery ($1 per mile, per order, max 15 mi) + live order total ----------
+  // Every order is delivered; there is no pickup option.
   const DB = window.DoughBox;
-  const fulfillment = document.getElementById('fulfillment');
-  const deliveryFields = document.getElementById('deliveryFields');
   const addressInput = document.getElementById('deliveryAddress');
   const milesInput = document.getElementById('deliveryMiles');
   const totalsBox = document.getElementById('orderTotals');
-  const isDelivery = () => fulfillment.value === 'Local delivery';
+  const delivery = true;
 
   function renderTotals() {
-    const delivery = isDelivery();
-    deliveryFields.hidden = !delivery;
-    addressInput.required = delivery;
     const box = DB.validate(DB.items);
     const t = DB.orderTotal(DB.items, delivery, milesInput.value);
     if (!box.cookies) { totalsBox.innerHTML = ''; return; }
     const rows = [`<li><span>Cookies · box of ${box.cookies}</span><span>${DB.money(t.cookies)}</span></li>`];
+    const dist = DB.checkDistance(milesInput.value);
+    milesInput.setAttribute('aria-invalid', String(delivery && (dist.status === 'too-far' || dist.status === 'invalid')));
     if (delivery) {
-      rows.push(t.delivery === null
-        ? `<li><span>Delivery · $1 per mile</span><span>we'll confirm</span></li>`
-        : `<li><span>Delivery · ${Number(milesInput.value)} mi × $1</span><span>${DB.money(t.delivery)}</span></li>`);
+      rows.push(
+        dist.status === 'ok' ? `<li><span>Delivery · ${dist.miles} mi × $1</span><span>${DB.money(dist.fee)}</span></li>`
+        : dist.status === 'too-far' ? `<li class="ot-warn"><span>Sorry — we only deliver within ${DB.MAX_DELIVERY_MILES} miles of our kitchen.</span></li>`
+        : dist.status === 'invalid' ? `<li class="ot-warn"><span>Enter the distance as a number of miles</span></li>`
+        : `<li><span>Delivery · $1 per mile</span><span>we'll confirm</span></li>`);
     }
-    rows.push(t.total === null
-      ? `<li class="ot-total"><span>Total</span><span>${DB.money(t.cookies)} + delivery</span></li>`
-      : `<li class="ot-total"><span>Total</span><span>${DB.money(t.total)}</span></li>`);
+    rows.push(t.total !== null
+      ? `<li class="ot-total"><span>Total</span><span>${DB.money(t.total)}</span></li>`
+      : dist.status === 'unknown'
+        ? `<li class="ot-total"><span>Total</span><span>${DB.money(t.cookies)} + delivery</span></li>`
+        : `<li class="ot-total"><span>Cookies</span><span>${DB.money(t.cookies)}</span></li>`);
     totalsBox.innerHTML = `<ul>${rows.join('')}</ul><p>Sales tax is included in our prices.</p>`;
   }
-  fulfillment.addEventListener('change', renderTotals);
   milesInput.addEventListener('input', renderTotals);
   DB.onChange(renderTotals);
   renderTotals();
@@ -122,15 +123,17 @@ document.addEventListener('DOMContentLoaded', () => {
       formNote.classList.add('is-error');
       formNote.textContent = missing.includes(addressInput)
         ? 'Please add your delivery address (and fill in any other missing details).'
-        : 'Please fill in your name, a valid email, and a pickup date.';
+        : 'Please fill in your name, a valid email, and a delivery date.';
       (missing[0] || email).focus();
       return;
     }
-    const delivery = isDelivery();
-    if (delivery && milesInput.value.trim() && DB.deliveryFee(milesInput.value) === null) {
+    const dist = DB.checkDistance(milesInput.value);
+    if (delivery && (dist.status === 'invalid' || dist.status === 'too-far')) {
       milesInput.setAttribute('aria-invalid', 'true');
       formNote.classList.add('is-error');
-      formNote.textContent = 'Please enter the delivery distance as a number of miles, or leave it blank.';
+      formNote.textContent = dist.status === 'too-far'
+        ? `Sorry — we only deliver within ${DB.MAX_DELIVERY_MILES} miles of our kitchen, so we can't take this order.`
+        : 'Please enter the delivery distance as a number of miles, or leave it blank.';
       milesInput.focus();
       return;
     }
@@ -141,19 +144,18 @@ document.addEventListener('DOMContentLoaded', () => {
       name: form.elements.name.value.trim(),
       email: email.value.trim(),
       phone: form.elements.phone.value.trim(),
-      pickupDate: form.elements.date.value,
-      fulfillment: form.elements.fulfillment.value,
+      deliveryDate: form.elements.date.value,
       notes: form.elements.message.value.trim(),
       box: box.lines,                 // [{ flavor, qty, price, lineTotal }, ...] (cents)
       boxSize: box.size,              // 4, 6, or 12
       totalCookies: box.cookies,
       totalFlavors: box.flavors,
       cookiesTotal: totals.cookies,   // cents, sales tax included
-      delivery: delivery ? {
+      delivery: {
         address: addressInput.value.trim(),
-        miles: DB.deliveryFee(milesInput.value) === null ? null : Number(milesInput.value),
+        miles: dist.status === 'ok' ? dist.miles : null,
         fee: totals.delivery            // cents; null = distance to be confirmed
-      } : null,
+      },
       total: totals.total             // cents; null until the delivery distance is confirmed
     };
 
@@ -176,7 +178,7 @@ document.addEventListener('DOMContentLoaded', () => {
     tot.className = 'order-receipt-total';
     tot.textContent = `Box of ${order.boxSize} · ${order.totalFlavors} ${order.totalFlavors === 1 ? 'flavor' : 'flavors'} · ${DB.money(order.cookiesTotal)}`;
     receipt.append(tot);
-    if (order.delivery) {
+    {
       const d = document.createElement('li');
       d.textContent = order.delivery.fee === null
         ? `Delivery · $1 per mile — we'll confirm the distance`

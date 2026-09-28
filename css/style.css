@@ -868,6 +868,8 @@ main > section, .site-footer { overflow-x: clip; }
 .order-totals ul { display: grid; gap: 4px; }
 .order-totals li { display: flex; justify-content: space-between; gap: 12px; font-weight: 700; color: var(--ink); font-size: .95rem; }
 .order-totals li span:last-child { font-variant-numeric: tabular-nums; }
+.order-totals .ot-warn { color: #A83A5A; font-weight: 700; }
+.field input[aria-invalid="true"] { border-color: #C0506E; }
 .order-totals .ot-total { margin-top: 4px; padding-top: 8px; border-top: 1.5px dashed rgba(168, 111, 76, .35); font-family: var(--font-display); font-size: 1.2rem; color: var(--plum); }
 .order-totals p { margin: 6px 0 0; font-family: var(--font-hand); font-size: 1.2rem; font-weight: 700; color: var(--cookie-ink); line-height: 1.1; }
 .box-panel-totals strong small { font-family: var(--font-body); font-size: .72rem; font-weight: 700; color: var(--muted); }

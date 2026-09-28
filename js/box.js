@@ -9,7 +9,7 @@
    - a box holds exactly 4, 6, or 12 cookies in total, mixed freely
    - 12 is the most a customer can order
    - prices are per large cookie and already include sales tax
-   - local delivery adds $1 per mile, once per order
+   - every order is delivered (no pickup): $1 per mile, once per order, up to 15 miles away
    - money is handled in whole cents
    ========================================================================== */
 (function () {
@@ -39,6 +39,7 @@
   const BOX_SIZES = [4, 6, 12];
   const MAX_COOKIES = BOX_SIZES[BOX_SIZES.length - 1];
   const DELIVERY_PER_MILE = 100;          // cents; local delivery is $1 per mile, per order
+  const MAX_DELIVERY_MILES = 15;          // we don't deliver farther than this
   const STORAGE_KEY = 'doughbunny.box.v1';
 
   const money = (cents) => `$${(cents / 100).toFixed(2)}`;
@@ -94,14 +95,20 @@
     return v.prev ? `${add} — or remove ${v.removeNeeded} for a box of ${v.prev}` : `${add} ♡`;
   }
 
-  // Delivery fee in cents for a distance in miles; null when the distance is unknown/invalid.
-  function deliveryFee(miles) {
+  // Check a delivery distance. status: 'unknown' (blank), 'invalid', 'too-far', or 'ok'.
+  // (Distance is entered by the customer for now; a maps service can supply it later.)
+  function checkDistance(miles) {
+    if (miles === null || miles === undefined || String(miles).trim() === '') return { status: 'unknown', fee: null };
     const m = Number(miles);
-    if (!Number.isFinite(m) || m <= 0) return null;
-    return Math.round(m * DELIVERY_PER_MILE);
+    if (!Number.isFinite(m) || m <= 0) return { status: 'invalid', fee: null };
+    if (m > MAX_DELIVERY_MILES) return { status: 'too-far', fee: null, miles: m };
+    return { status: 'ok', fee: Math.round(m * DELIVERY_PER_MILE), miles: m };
   }
 
-  // Cookies (tax included) + delivery. deliveryCents: 0 for pickup, null if still to be confirmed.
+  // Delivery fee in cents; null when the distance is blank, invalid, or beyond the limit.
+  function deliveryFee(miles) { return checkDistance(miles).fee; }
+
+  // Cookies (tax included) + delivery. Delivery fee is null while the distance is still to be confirmed.
   function orderTotal(items, delivery, miles) {
     const v = validate(items);
     const fee = delivery ? deliveryFee(miles) : 0;
@@ -154,7 +161,7 @@
   // Expose the model (read-only snapshot + validation) for the order form and tests.
   window.DoughBox = {
     FLAVORS, PRICES, BOX_SIZES, MAX_COOKIES,
-    DELIVERY_PER_MILE,
+    DELIVERY_PER_MILE, MAX_DELIVERY_MILES, checkDistance,
     sanitize, totals, validate, message, sizeLabel, money, deliveryFee, orderTotal,
     get items() { return { ...items }; },
     set, change, clear, onChange,
