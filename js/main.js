@@ -79,8 +79,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!box.ok) {
       formNote.classList.add('is-error');
       formNote.textContent = box.cookies === 0
-        ? `Your box is empty — add at least ${window.DoughBox.MIN_COOKIES} cookies.`
-        : `Your box needs ${box.missing} more ${box.missing === 1 ? 'cookie' : 'cookies'} (minimum ${window.DoughBox.MIN_COOKIES}).`;
+        ? 'Your box is empty — choose a box of 4, 6, or 12 cookies.'
+        : `Boxes come in 4, 6, or 12 cookies. ${window.DoughBox.message(box).replace(/\s*♡$/, '')}.`;
       const firstAdd = form.querySelector('.builder-list .step-btn--add');
       firstAdd && firstAdd.focus();
       return;
@@ -101,9 +101,12 @@ document.addEventListener('DOMContentLoaded', () => {
       pickupDate: form.elements.date.value,
       fulfillment: form.elements.fulfillment.value,
       notes: form.elements.message.value.trim(),
-      box: box.lines,                 // [{ flavor, qty }, ...]
+      box: box.lines,                 // [{ flavor, qty, price, lineTotal }, ...] (cents)
+      boxSize: box.size,              // 4, 6, or 12
       totalCookies: box.cookies,
-      totalFlavors: box.flavors
+      totalFlavors: box.flavors,
+      subtotal: box.subtotal          // cents
+
     };
 
     // Static site: no backend yet. When a form service/email is connected, send `order`
@@ -118,12 +121,12 @@ document.addEventListener('DOMContentLoaded', () => {
     receipt.className = 'order-receipt';
     order.box.forEach(l => {
       const li = document.createElement('li');
-      li.textContent = `${l.qty} × ${l.flavor}`;
+      li.textContent = `${l.qty} × ${l.flavor} — ${window.DoughBox.money(l.lineTotal)}`;
       receipt.append(li);
     });
     const tot = document.createElement('li');
     tot.className = 'order-receipt-total';
-    tot.textContent = `${order.totalCookies} cookies · ${order.totalFlavors} ${order.totalFlavors === 1 ? 'flavor' : 'flavors'}`;
+    tot.textContent = `Box of ${order.boxSize} · ${order.totalFlavors} ${order.totalFlavors === 1 ? 'flavor' : 'flavors'} · Subtotal ${window.DoughBox.money(order.subtotal)}`;
     receipt.append(tot);
     formNote.append(thanks, receipt);
 

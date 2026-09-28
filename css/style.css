@@ -857,8 +857,33 @@ main > section, .site-footer { overflow-x: clip; }
 .box-panel-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .box-panel-actions .btn { padding-left: .6em; padding-right: .6em; }
 
+
+/* box sizes: 4 / 6 / 12 tracker + prices */
+.size-track { display: flex; align-items: center; gap: 8px; margin: 12px 0 0; padding: 0; list-style: none; }
+.size-track li { display: flex; align-items: center; gap: 8px; }
+.size-track li + li::before { content: ''; width: 18px; border-top: 2px dashed var(--lav-soft); }
+.size-track li span {
+  display: inline-flex; align-items: baseline; justify-content: center; white-space: nowrap; min-width: 44px; padding: 8px 10px; 
+  font: 800 .95rem/1 var(--font-body); color: var(--muted);
+  background: var(--cream); border: 1.5px dashed var(--lav-soft); border-radius: 8px 10px 9px 11px;
+  transition: background .25s, color .25s, border-color .25s, rotate .25s var(--ease);
+}
+.size-track li span::after { content: ' box'; font-weight: 600; font-size: .78em; margin-left: 3px; }
+.size-track li.is-passed span { color: var(--lav-ink); border-color: var(--lav); }
+.size-track li.is-next span { color: var(--plum); border: 2px solid var(--pink-deep); background: var(--pink-soft); }
+.size-track li.is-current span { color: var(--cream); background: var(--plum); border: 2px solid var(--plum); box-shadow: 2px 2px 0 var(--pink); rotate: -3deg; }
+.size-track li.is-current span::before { content: '♥ '; color: var(--pink); margin-right: 3px; }
+.box-panel .size-track { margin: 10px 0 0; }
+
+.builder-name small { display: block; font-size: .78rem; font-weight: 700; color: var(--cookie-ink); letter-spacing: .02em; }
+.bp-price { float: right; font-family: var(--font-body); font-size: .95rem; font-weight: 700; color: var(--muted); padding-top: .35em; }
+.box-panel-totals strong { font-size: 1.15rem; }
+.box-panel-totals span { font-size: .9rem; }
+
 @media (max-width: 680px) {
   .box-panel { right: 12px; bottom: 76px; }
+  .size-track li + li::before { width: 10px; }
+  .size-track li span { min-width: 0; padding: 0 8px; }
   .box-panel-actions { grid-template-columns: 1fr; }
   .spotlight .box-control { justify-items: center; }
   .spotlight .added-note { justify-content: center; }
