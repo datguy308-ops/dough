@@ -8,24 +8,37 @@
    Business rules (keep in sync with any future order backend):
    - a box holds exactly 4, 6, or 12 cookies in total, mixed freely
    - 12 is the most a customer can order
-   - prices are per large cookie; money is handled in whole cents
+   - prices are per large cookie and already include sales tax
+   - local delivery adds $1 per mile, once per order
+   - money is handled in whole cents
    ========================================================================== */
 (function () {
   'use strict';
 
   // flavor -> price per large cookie, in cents
   const PRICES = {
-    'Chocolate Chip': 450,
-    'Strawberry Shortcake': 600,
-    'Frosted Butter Cut-Out': 500,
-    'Natilla Snickerdoodle': 450,
-    'Banana Pudding': 550,
-    'Brownie Crispy-Top': 550,
-    "S'mores": 550
+    'Chocolate Chip Cookies': 450,
+    'Strawberry Shortcake Cookies': 600,
+    'Frosted Butter Cookies': 500,
+    'Natilla Snickerdoodle Cookies': 450,
+    'Banana Pudding Cookies': 550,
+    'Crackly-Top Brownie Cookies': 550,
+    "S'mores Cookies": 550
+  };
+  // earlier flavor names -> current names, so boxes saved before the rename still load
+  const RENAMED = {
+    'Chocolate Chip': 'Chocolate Chip Cookies',
+    'Strawberry Shortcake': 'Strawberry Shortcake Cookies',
+    'Frosted Butter Cut-Out': 'Frosted Butter Cookies',
+    'Natilla Snickerdoodle': 'Natilla Snickerdoodle Cookies',
+    'Banana Pudding': 'Banana Pudding Cookies',
+    'Brownie Crispy-Top': 'Crackly-Top Brownie Cookies',
+    "S'mores": "S'mores Cookies"
   };
   const FLAVORS = Object.keys(PRICES);
   const BOX_SIZES = [4, 6, 12];
   const MAX_COOKIES = BOX_SIZES[BOX_SIZES.length - 1];
+  const DELIVERY_PER_MILE = 100;          // cents; local delivery is $1 per mile, per order
   const STORAGE_KEY = 'doughbunny.box.v1';
 
   const money = (cents) => `$${(cents / 100).toFixed(2)}`;
@@ -81,6 +94,20 @@
     return v.prev ? `${add} — or remove ${v.removeNeeded} for a box of ${v.prev}` : `${add} ♡`;
   }
 
+  // Delivery fee in cents for a distance in miles; null when the distance is unknown/invalid.
+  function deliveryFee(miles) {
+    const m = Number(miles);
+    if (!Number.isFinite(m) || m <= 0) return null;
+    return Math.round(m * DELIVERY_PER_MILE);
+  }
+
+  // Cookies (tax included) + delivery. deliveryCents: 0 for pickup, null if still to be confirmed.
+  function orderTotal(items, delivery, miles) {
+    const v = validate(items);
+    const fee = delivery ? deliveryFee(miles) : 0;
+    return { cookies: v.subtotal, delivery: fee, total: fee === null ? null : v.subtotal + fee };
+  }
+
   function sizeLabel(n) {
     if (n === 6) return 'a half dozen';
     if (n === 12) return 'a dozen';
@@ -89,8 +116,15 @@
 
   /* ---------- state ---------- */
 
+  const migrate = (raw) => {
+    const out = { ...(raw || {}) };
+    Object.keys(RENAMED).forEach(old => {
+      if (old in out) { out[RENAMED[old]] = (Number(out[RENAMED[old]]) || 0) + (Number(out[old]) || 0); delete out[old]; }
+    });
+    return out;
+  };
   const load = () => {
-    try { return sanitize(JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}').items); }
+    try { return sanitize(migrate(JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}').items)); }
     catch (e) { return sanitize({}); }
   };
   let items = load();
@@ -120,7 +154,8 @@
   // Expose the model (read-only snapshot + validation) for the order form and tests.
   window.DoughBox = {
     FLAVORS, PRICES, BOX_SIZES, MAX_COOKIES,
-    sanitize, totals, validate, message, sizeLabel, money,
+    DELIVERY_PER_MILE,
+    sanitize, totals, validate, message, sizeLabel, money, deliveryFee, orderTotal,
     get items() { return { ...items }; },
     set, change, clear, onChange,
     // re-read storage in case another tab changed it
@@ -261,7 +296,7 @@
         panelList.innerHTML = v.lines.length
           ? v.lines.map(l => `<li><span class="bp-qty">${l.qty} ×</span> <span class="bp-name">${l.flavor}</span> <span class="bp-price">${money(l.lineTotal)}</span></li>`).join('')
           : '<li class="bp-empty">Your box is empty — tap <em>Add a little love</em> on any cookie.</li>';
-        panelTotals.innerHTML = `<span>${plural(v.cookies, 'cookie', 'cookies')} · ${plural(v.flavors, 'flavor', 'flavors')}</span><strong>Subtotal ${money(v.subtotal)}</strong>`;
+        panelTotals.innerHTML = `<span>${plural(v.cookies, 'cookie', 'cookies')} · ${plural(v.flavors, 'flavor', 'flavors')}</span><strong>${money(v.subtotal)} <small>tax incl.</small></strong>`;
         panelMsg.textContent = message(v);
         panelMsg.classList.toggle('is-ok', v.ok);
         continueBtn.disabled = !v.ok;
@@ -270,12 +305,12 @@
       // form
       if (formTotal) {
         const size = sizeLabel(v.cookies);
-        formTotal.innerHTML = `<strong>${plural(v.cookies, 'cookie', 'cookies')} · Subtotal ${money(v.subtotal)}</strong>${v.flavors ? ` <span>· ${plural(v.flavors, 'flavor', 'flavors')}${size ? ` · that's ${size}!` : ''}</span>` : ''}`;
+        formTotal.innerHTML = `<strong>${plural(v.cookies, 'cookie', 'cookies')} · ${money(v.subtotal)}</strong>${v.flavors ? ` <span>· ${plural(v.flavors, 'flavor', 'flavors')}${size ? ` · that's ${size}!` : ''}</span>` : ''}`;
         formMsg.textContent = message(v);
         formMsg.classList.toggle('is-ok', v.ok);
         submitBtn.disabled = !v.ok;
         hiddenBox.value = v.lines.map(l => `${l.qty} x ${l.flavor} (${money(l.lineTotal)})`).join('; ')
-          + (v.lines.length ? `; box of ${v.cookies}; subtotal ${money(v.subtotal)}` : '');
+          + (v.lines.length ? `; box of ${v.cookies}; cookies ${money(v.subtotal)} incl. tax` : '');
       }
 
       renderTracks(v);

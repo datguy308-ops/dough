@@ -858,6 +858,20 @@ main > section, .site-footer { overflow-x: clip; }
 .box-panel-actions .btn { padding-left: .6em; padding-right: .6em; }
 
 
+/* delivery + order total */
+.delivery-fields[hidden] { display: none; }
+.delivery-fields { padding: 14px 14px 2px; margin: -4px 0 16px; background: var(--lav-tint); border: 1.5px dashed var(--lav-soft); border-radius: 8px; }
+.delivery-hint { font-size: .88rem; color: var(--muted); margin: -6px 0 12px; }
+.delivery-hint strong { color: var(--plum); }
+.order-totals:empty { display: none; }
+.order-totals { position: relative; z-index: 1; margin: 0 0 18px; padding: 12px 16px 10px; background: var(--butter-soft); border-radius: 6px; box-shadow: inset 0 0 0 1.5px rgba(168, 111, 76, .2); }
+.order-totals ul { display: grid; gap: 4px; }
+.order-totals li { display: flex; justify-content: space-between; gap: 12px; font-weight: 700; color: var(--ink); font-size: .95rem; }
+.order-totals li span:last-child { font-variant-numeric: tabular-nums; }
+.order-totals .ot-total { margin-top: 4px; padding-top: 8px; border-top: 1.5px dashed rgba(168, 111, 76, .35); font-family: var(--font-display); font-size: 1.2rem; color: var(--plum); }
+.order-totals p { margin: 6px 0 0; font-family: var(--font-hand); font-size: 1.2rem; font-weight: 700; color: var(--cookie-ink); line-height: 1.1; }
+.box-panel-totals strong small { font-family: var(--font-body); font-size: .72rem; font-weight: 700; color: var(--muted); }
+
 /* box sizes: 4 / 6 / 12 tracker + prices */
 .size-track { display: flex; align-items: center; gap: 8px; margin: 12px 0 0; padding: 0; list-style: none; }
 .size-track li { display: flex; align-items: center; gap: 8px; }
