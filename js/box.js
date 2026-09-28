@@ -95,8 +95,8 @@
     return v.prev ? `${add} — or remove ${v.removeNeeded} for a box of ${v.prev}` : `${add} ♡`;
   }
 
-  // Check a delivery distance. status: 'unknown' (blank), 'invalid', 'too-far', or 'ok'.
-  // (Distance is entered by the customer for now; a maps service can supply it later.)
+  // Check a delivery distance (miles from the kitchen, from the maps service).
+  // status: 'unknown' (blank), 'invalid', 'too-far', or 'ok'.
   function checkDistance(miles) {
     if (miles === null || miles === undefined || String(miles).trim() === '') return { status: 'unknown', fee: null };
     const m = Number(miles);
@@ -158,10 +158,18 @@
   const clear = () => { items = sanitize({}); save(); listeners.forEach(fn => fn({ cleared: true })); };
   const onChange = (fn) => listeners.push(fn);
 
+  // Distance lookup hook for the maps service (added later):
+  //   DoughBox.setDistanceProvider(async (address) => milesFromKitchen)
+  // Keep the kitchen address and maps API key on the server side of that call —
+  // anything in this file or the page is visible to visitors.
+  let distanceProvider = null;
+  const setDistanceProvider = (fn) => { distanceProvider = typeof fn === 'function' ? fn : null; };
+
   // Expose the model (read-only snapshot + validation) for the order form and tests.
   window.DoughBox = {
     FLAVORS, PRICES, BOX_SIZES, MAX_COOKIES,
     DELIVERY_PER_MILE, MAX_DELIVERY_MILES, checkDistance,
+    setDistanceProvider, get distanceProvider() { return distanceProvider; },
     sanitize, totals, validate, message, sizeLabel, money, deliveryFee, orderTotal,
     get items() { return { ...items }; },
     set, change, clear, onChange,
