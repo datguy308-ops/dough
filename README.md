@@ -37,15 +37,22 @@ DoughOrders.setSubmitHandler(async (order) => {
 
 `order` contains the customer info, `box` (`[{ flavor, qty, price, lineTotal }]`, cents), `boxSize`, `cookiesTotal`, `delivery` (`address`, `instructions`, `miles`, `fee`), and `total`. Re-check the box size and recompute the totals from `PRICES` on the server — the browser check can't stop a hand-crafted request. Until a handler is registered, the confirmation clearly says the request was **not** sent and offers a pre-written email to the bakery plus the phone number.
 
+## Business info on the site (from the website information form)
+
+- Contact: (786) 759-6369 · doughbunnybakery@gmail.com · Instagram @dough_bunny (no Facebook).
+- Menu: Chocolate Chip, Strawberry Shortcake, Frosted Butter, Natilla Snickerdoodle, Crackly-Top Brownie, S'mores. Banana Pudding (and Matcha / Vanilla Matcha / Spice) must not be added.
+- Allergens per flavor live in `ALLERGENS` in `js/box.js` (the cards, the order form summary, and the order all read from it).
+- Approved claims: made from scratch, made in small batches. "Baked fresh to order" was not approved — don't add it back.
+- Policies (cancellation, refund, failed delivery, unavailable at delivery, same-day "only if available") are shown verbatim in the Order Policies section and FAQ.
+- Florida cottage food: F.S. 500.80; the required sentence appears in the menu notice, policies, and footer. The kitchen address must never appear on the site.
+- Reviews stay empty until real, approved reviews are provided.
+
 ## Before launch
 
-- Replace the placeholder phone number `(555) 123-4567` and confirm `hello@doughbunny.com` (both appear in the order section, confirmation, and footer).
-- Add real Instagram/Facebook links (footer — there's a commented example where "coming soon" is shown).
-- Add real customer reviews in Our Kitchen (a commented template replaces the "coming soon" card), only with customers' permission.
-- Personalize the "Our Kitchen" letter with the baker's real story; confirm the "Est. 2026" stamp year.
-- Fill in FAQ answers that aren't on the site yet (payment, changes/cancellations, custom/event orders) — commented placeholders in the FAQ.
-- Soy: the notice says "some flavors contain soy" but not which — once known, add it to those cookie cards' allergen line.
-- Connect the two hooks above.
+See the launch checklist given with this update (hosting, order sending, payment, sales tax, labels, privacy policy). Still open on the site itself:
+- How customers pay (add to Order Policies + FAQ once decided).
+- A privacy policy page (the form collects name, email, phone, and address).
+- Real reviews, once approved.
 
 ## Running locally
 

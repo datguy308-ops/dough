@@ -25,7 +25,6 @@
     'Strawberry Shortcake Cookies': 600,
     'Frosted Butter Cookies': 500,
     'Natilla Snickerdoodle Cookies': 450,
-    'Banana Pudding Cookies': 550,
     'Crackly-Top Brownie Cookies': 550,
     "S'mores Cookies": 550
   };
@@ -35,11 +34,22 @@
     'Strawberry Shortcake': 'Strawberry Shortcake Cookies',
     'Frosted Butter Cut-Out': 'Frosted Butter Cookies',
     'Natilla Snickerdoodle': 'Natilla Snickerdoodle Cookies',
-    'Banana Pudding': 'Banana Pudding Cookies',
     'Brownie Crispy-Top': 'Crackly-Top Brownie Cookies',
     "S'mores": "S'mores Cookies"
   };
+  // Allergen statements per flavor, exactly as provided by the bakery (website information form).
+  const ALLERGENS = {
+    'Chocolate Chip Cookies': { contains: ['Wheat', 'Milk', 'Eggs', 'Soy'], note: 'Made in a kitchen that handles peanuts, tree nuts, sesame, and other major allergens. Cross-contact may occur.' },
+    'Strawberry Shortcake Cookies': { contains: ['Wheat', 'Milk', 'Eggs', 'Soy'], note: 'Cross-contact with other major allergens may occur.' },
+    'Frosted Butter Cookies': { contains: ['Wheat', 'Milk', 'Eggs'], note: 'Made in a kitchen that handles soy, peanuts, tree nuts, sesame, and other major allergens; cross-contact may occur.' },
+    'Natilla Snickerdoodle Cookies': { contains: ['Wheat', 'Milk', 'Eggs'], note: 'Cross-contact with other major allergens may occur.' },
+    'Crackly-Top Brownie Cookies': { contains: ['Wheat', 'Milk', 'Eggs', 'Soy'], note: 'Made in a kitchen that handles peanuts, tree nuts, sesame, and other major allergens; cross-contact may occur.' },
+    "S'mores Cookies": { contains: ['Wheat', 'Milk', 'Eggs', 'Soy'], note: 'Cross-contact with other major allergens may occur.' }
+  };
   const FLAVORS = Object.keys(PRICES);
+  // allergens contained across a set of flavors (in a stable order)
+  const ALLERGEN_ORDER = ['Wheat', 'Milk', 'Eggs', 'Soy'];
+  const allergensIn = (flavors) => ALLERGEN_ORDER.filter(a => flavors.some(f => (ALLERGENS[f] || { contains: [] }).contains.includes(a)));
   const BOX_SIZES = [4, 6, 12];
   const MAX_COOKIES = BOX_SIZES[BOX_SIZES.length - 1];
   const DELIVERY_PER_MILE = 100;          // cents; local delivery is $1 per mile, per order
@@ -208,7 +218,7 @@
 
   // Expose the model (read-only snapshot + validation) for the order form and tests.
   window.DoughBox = {
-    FLAVORS, PRICES, BOX_SIZES, MAX_COOKIES,
+    FLAVORS, PRICES, ALLERGENS, allergensIn, BOX_SIZES, MAX_COOKIES,
     DELIVERY_PER_MILE, MAX_DELIVERY_MILES, checkDistance,
     setDistanceProvider, get distanceProvider() { return distanceProvider; },
     sanitize, totals, validate, message, progress, sizeLabel, listSizes, money, moneyShort, label, deliveryFee, orderTotal,
@@ -232,6 +242,10 @@
       'box-sizes': listSizes()
     };
     document.querySelectorAll('[data-db]').forEach(el => { if (el.dataset.db in bind) el.textContent = bind[el.dataset.db]; });
+    document.querySelectorAll('[data-allergens-for]').forEach(el => {
+      const a = ALLERGENS[el.dataset.allergensFor];
+      if (a) el.innerHTML = `<strong>Contains: ${a.contains.join(', ')}.</strong> <span>${a.note}</span>`;
+    });
     document.querySelectorAll('[data-price-for]').forEach(el => {
       const f = el.dataset.priceFor;
       if (f in PRICES) el.innerHTML = `${money(PRICES[f])} <small>per large cookie</small>`;
@@ -300,7 +314,7 @@
     const formRows = FLAVORS.map(flavor => {
       const li = document.createElement('li');
       li.className = 'builder-row';
-      li.innerHTML = `<span class="builder-name">${label(flavor)}<small>${money(PRICES[flavor])} each</small></span>`;
+      li.innerHTML = `<span class="builder-name">${label(flavor)}<small>${money(PRICES[flavor])} each · contains ${ALLERGENS[flavor].contains.join(', ').toLowerCase()}</small></span>`;
       const stepper = makeStepper(flavor, 'sm');
       li.append(stepper);
       formList && formList.append(li);
@@ -342,6 +356,7 @@
     const formMsg = document.getElementById('boxMinMsg');
     const submitBtn = document.getElementById('orderSubmit');
     const hiddenBox = document.getElementById('boxField');
+    const boxAllergens = document.getElementById('boxAllergens');
 
     function render(evt) {
       const v = validate(items);
@@ -418,6 +433,12 @@
         formMsg.textContent = prog;
         formMsg.classList.toggle('is-ok', v.ok);
         submitBtn.disabled = !v.ok;
+        if (boxAllergens) {
+          boxAllergens.hidden = !v.lines.length;
+          boxAllergens.innerHTML = v.lines.length
+            ? `<strong>Allergens in your box:</strong> contains ${allergensIn(v.lines.map(l => l.flavor)).join(', ').toLowerCase()}. Our kitchen handles peanuts, tree nuts, sesame, soy, and other major allergens; cross-contact may occur.`
+            : '';
+        }
         hiddenBox.value = v.lines.map(l => `${l.qty} x ${l.flavor} (${money(l.lineTotal)})`).join('; ')
           + (v.lines.length ? `; box of ${v.cookies}; cookies ${money(v.subtotal)} incl. tax` : '');
       }

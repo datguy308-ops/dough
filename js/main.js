@@ -59,8 +59,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const form = document.getElementById('orderForm');
   const dateInput = document.getElementById('deliveryDate');
   if (dateInput) {
-    // earliest date = two days out, in the visitor's local time (not UTC)
-    const min = new Date(Date.now() + 2 * 864e5);
+    // earliest date = today (same-day orders only if available — we confirm), in local time
+    const min = new Date();
     const pad = (n) => String(n).padStart(2, '0');
     dateInput.min = `${min.getFullYear()}-${pad(min.getMonth() + 1)}-${pad(min.getDate())}`;
   }
@@ -182,6 +182,7 @@ document.addEventListener('DOMContentLoaded', () => {
       `Cookie subtotal: ${DB.money(order.cookiesTotal)} (tax included)`,
       `Delivery: ${order.delivery.fee === null ? `${perMile} per mile, to be confirmed` : `${order.delivery.miles} mi, ${DB.money(order.delivery.fee)}`}`,
       order.total === null ? null : `Total: ${DB.money(order.total)}`,
+      `Allergens in this box: contains ${order.allergens.join(', ')}. Cross-contact with other major allergens may occur.`,
       order.notes ? `\nNotes & allergies: ${order.notes}` : null
     ];
     return lines.filter(l => l !== null).join('\n');
@@ -218,6 +219,7 @@ document.addEventListener('DOMContentLoaded', () => {
     line(`Delivery date: ${new Date(order.deliveryDate + 'T12:00').toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' })}`, 'order-receipt-note');
     line(`Deliver to: ${order.delivery.address}`, 'order-receipt-note');
     if (order.delivery.instructions) line(`Instructions: ${order.delivery.instructions}`, 'order-receipt-note');
+    line(`Allergens: contains ${order.allergens.join(', ').toLowerCase()}; cross-contact with other major allergens may occur.`, 'order-receipt-note');
 
     $('confirmNext').textContent = sent
       ? 'Dough Bunny will reach out to confirm your order, delivery date, and delivery fee.'
@@ -245,7 +247,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Re-validate the box from the saved model at submit time — the disabled
     // button is only a hint, this is the actual check.
     const box = DB.validate(DB.items);
-    const missing = [...form.querySelectorAll('[required]')].filter(f => !f.value.trim());
+    const missing = [...form.querySelectorAll('[required]')].filter(f => (f.type === 'checkbox' ? !f.checked : !f.value.trim()));
+    const agree = document.getElementById('agreePolicies');
     const email = form.elements.email;
     const badEmail = !missing.includes(email) && !email.checkValidity();
 
@@ -263,7 +266,9 @@ document.addEventListener('DOMContentLoaded', () => {
       formNote.classList.add('is-error');
       formNote.textContent = missing.includes(addressInput)
         ? 'Please add your delivery address (and fill in any other missing details).'
-        : 'Please fill in your name, a valid email, and a delivery date.';
+        : missing.length === 1 && missing[0] === agree
+          ? 'Please confirm you\'ve read the order policies and allergen information.'
+          : 'Please fill in your name, a valid email, and a delivery date.';
       (missing[0] || email).focus();
       return;
     }
@@ -295,6 +300,8 @@ document.addEventListener('DOMContentLoaded', () => {
         totalCookies: box.cookies,
         totalFlavors: box.flavors,
         cookiesTotal: box.subtotal,     // cents, sales tax included
+        allergens: DB.allergensIn(box.lines.map(l => l.flavor)),
+        agreedToPolicies: agree.checked,
         delivery: {
           address: addressInput.value.trim(),
           instructions: instructionsInput.value.trim(),

@@ -439,7 +439,7 @@ main > section, .site-footer { overflow-x: clip; }
 
 .recipe-tile h3 { font-size: 1.22rem; font-weight: 650; text-transform: uppercase; letter-spacing: .06em; margin-bottom: .2em; line-height: 1.2; }
 .tile-notes { font-size: .7rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--cookie-ink); margin-bottom: .35em; }
-.tile-allergens { position: relative; margin: 0 0 14px; padding-left: 16px; font-size: .78rem; font-weight: 700; color: var(--muted); }
+.tile-allergens { position: relative; margin: 0 0 14px; padding-left: 16px; font-size: .78rem; color: var(--muted); }
 .tile-allergens::before { content: ''; position: absolute; left: 0; top: .45em; width: 9px; height: 9px; border-radius: 50%; border: 2px solid var(--pink-deep); }
 .tile-desc {
   font-size: .92rem; line-height: 1.6; color: var(--muted); margin-bottom: 12px;
@@ -855,7 +855,8 @@ main > section, .site-footer { overflow-x: clip; }
 .order-totals { position: relative; z-index: 1; margin: 0 0 18px; padding: 12px 16px 10px; background: var(--butter-soft); border-radius: 6px; box-shadow: inset 0 0 0 1.5px rgba(168, 111, 76, .2); }
 .order-totals ul { display: grid; gap: 4px; }
 .order-totals li { display: flex; justify-content: space-between; gap: 12px; font-weight: 700; color: var(--ink); font-size: .95rem; }
-.order-totals li span:last-child { font-variant-numeric: tabular-nums; }
+.order-totals li span:first-child { flex: 1 1 auto; min-width: 0; }
+.order-totals li span:last-child { flex: 0 0 auto; white-space: nowrap; text-align: right; font-variant-numeric: tabular-nums; }
 .order-totals .ot-warn { color: #A83A5A; font-weight: 700; }
 .field input[aria-invalid="true"] { border-color: #C0506E; }
 .order-totals .ot-total { margin-top: 4px; padding-top: 8px; border-top: 1.5px dashed rgba(168, 111, 76, .35); font-family: var(--font-display); font-size: 1.2rem; color: var(--plum); }
@@ -1017,6 +1018,41 @@ main > section, .site-footer { overflow-x: clip; }
 /* footer bits */
 .social-soon { margin: 0; font-size: .92rem; color: var(--muted); }
 .footer-bottom .legal { max-width: 560px; font-size: .8rem; }
+
+
+/* allergen details, policies, agreement checkbox */
+.tile-allergens { font-weight: 600; line-height: 1.45; }
+.tile-allergens strong { display: block; color: var(--plum); font-weight: 800; }
+.tile-allergens span { font-size: .74rem; }
+.box-allergens { margin: 10px 0 0; padding: 10px 12px; background: var(--butter-soft); border-radius: 8px; box-shadow: inset 0 0 0 1.5px rgba(168, 111, 76, .22); font-size: .86rem; color: var(--ink); }
+.box-allergens[hidden] { display: none; }
+.cottage-notice p + p { margin-top: .6em; }
+.agree { display: flex; align-items: flex-start; gap: 10px; margin: 0 0 6px; font-size: .92rem; font-weight: 600; color: var(--ink); cursor: pointer; }
+.agree input { width: 22px; height: 22px; margin: 1px 0 0; flex-shrink: 0; accent-color: var(--plum); cursor: pointer; }
+.agree a { color: var(--plum); font-weight: 800; border-bottom: 2px solid var(--pink); }
+.agree input[aria-invalid="true"] { outline: 2px solid #A83A5A; outline-offset: 2px; }
+
+.policies { padding: clamp(60px, 8vw, 100px) 0; }
+.policy-card {
+  position: relative; max-width: 880px; margin: 0 auto;
+  background-color: var(--paper); background-image: var(--lined), var(--grain); background-position: 0 14px, 0 0;
+  padding: clamp(32px, 4vw, 48px) clamp(24px, 4vw, 52px);
+  box-shadow: var(--shadow-lift);
+}
+.policy-card h2 { margin-bottom: .6em; }
+.policy-list { display: grid; gap: 14px; margin: 0; }
+.policy-list div { display: grid; grid-template-columns: 220px 1fr; gap: 6px 20px; padding-bottom: 12px; border-bottom: 1.5px dashed var(--line); }
+.policy-list div:last-child { border-bottom: 0; }
+.policy-list dt { font-family: var(--font-display); font-weight: 600; color: var(--plum); }
+.policy-list dd { margin: 0; color: var(--muted); font-size: .96rem; }
+.policy-list dd strong { color: var(--ink); }
+.policy-contact { margin: 18px 0 0; font-size: .95rem; color: var(--ink); }
+.policy-contact a { color: var(--plum); font-weight: 700; border-bottom: 2px solid var(--pink); }
+@media (max-width: 680px) {
+  .policy-list div { grid-template-columns: 1fr; }
+  .order-totals li { font-size: .9rem; }
+  .order-totals .ot-total { font-size: 1.05rem; }
+}
 
 /* ==========================================================================
    RESPONSIVE
