@@ -19,37 +19,49 @@
 (function () {
   'use strict';
 
-  // flavor -> price per large cookie, in cents
+  // flavor -> price per large cookie, in cents. Names are exactly the bakery's cookbook names
+  // (shown on screen and sent with orders) — don't rename or add alternate names.
   const PRICES = {
-    'Chocolate Chip Cookies': 450,
-    'Strawberry Shortcake Cookies': 600,
-    'Frosted Butter Cookies': 500,
-    'Natilla Snickerdoodle Cookies': 450,
-    'Crackly-Top Brownie Cookies': 550,
-    "S'mores Cookies": 550
+    'Chocolate Chip': 450,
+    'Snickerdoodle': 450,
+    "S'mores": 550,
+    'Strawberry Shortcake': 600,
+    'Frosted Butter Cookie': 500,
+    'Banana Pudding': 550,
+    'Brownie Cookie': 550
   };
-  // earlier flavor names -> current names, so boxes saved before the rename still load
+  // earlier flavor names -> current names, so boxes saved by older versions of the site still load
   const RENAMED = {
-    'Chocolate Chip': 'Chocolate Chip Cookies',
-    'Strawberry Shortcake': 'Strawberry Shortcake Cookies',
-    'Frosted Butter Cut-Out': 'Frosted Butter Cookies',
-    'Natilla Snickerdoodle': 'Natilla Snickerdoodle Cookies',
-    'Brownie Crispy-Top': 'Crackly-Top Brownie Cookies',
-    "S'mores": "S'mores Cookies"
+    'Chocolate Chip Cookies': 'Chocolate Chip',
+    'Strawberry Shortcake Cookies': 'Strawberry Shortcake',
+    'Frosted Butter Cookies': 'Frosted Butter Cookie',
+    'Frosted Butter Cut-Out': 'Frosted Butter Cookie',
+    'Natilla Snickerdoodle Cookies': 'Snickerdoodle',
+    'Natilla Snickerdoodle': 'Snickerdoodle',
+    'Banana Pudding Cookies': 'Banana Pudding',
+    'Crackly-Top Brownie Cookies': 'Brownie Cookie',
+    'Brownie Crispy-Top': 'Brownie Cookie',
+    "S'mores Cookies": "S'mores"
   };
   // Allergen statements per flavor, exactly as provided by the bakery (website information form).
+  // A flavor without an entry shows "allergen details coming soon" — never guess.
   const ALLERGENS = {
-    'Chocolate Chip Cookies': { contains: ['Wheat', 'Milk', 'Eggs', 'Soy'], note: 'Made in a kitchen that handles peanuts, tree nuts, sesame, and other major allergens. Cross-contact may occur.' },
-    'Strawberry Shortcake Cookies': { contains: ['Wheat', 'Milk', 'Eggs', 'Soy'], note: 'Cross-contact with other major allergens may occur.' },
-    'Frosted Butter Cookies': { contains: ['Wheat', 'Milk', 'Eggs'], note: 'Made in a kitchen that handles soy, peanuts, tree nuts, sesame, and other major allergens; cross-contact may occur.' },
-    'Natilla Snickerdoodle Cookies': { contains: ['Wheat', 'Milk', 'Eggs'], note: 'Cross-contact with other major allergens may occur.' },
-    'Crackly-Top Brownie Cookies': { contains: ['Wheat', 'Milk', 'Eggs', 'Soy'], note: 'Made in a kitchen that handles peanuts, tree nuts, sesame, and other major allergens; cross-contact may occur.' },
-    "S'mores Cookies": { contains: ['Wheat', 'Milk', 'Eggs', 'Soy'], note: 'Cross-contact with other major allergens may occur.' }
+    'Chocolate Chip': { contains: ['Wheat', 'Milk', 'Eggs', 'Soy'], note: 'Made in a kitchen that handles peanuts, tree nuts, sesame, and other major allergens. Cross-contact may occur.' },
+    'Snickerdoodle': { contains: ['Wheat', 'Milk', 'Eggs'], note: 'Cross-contact with other major allergens may occur.' },
+    "S'mores": { contains: ['Wheat', 'Milk', 'Eggs', 'Soy'], note: 'Cross-contact with other major allergens may occur.' },
+    'Strawberry Shortcake': { contains: ['Wheat', 'Milk', 'Eggs', 'Soy'], note: 'Cross-contact with other major allergens may occur.' },
+    'Frosted Butter Cookie': { contains: ['Wheat', 'Milk', 'Eggs'], note: 'Made in a kitchen that handles soy, peanuts, tree nuts, sesame, and other major allergens; cross-contact may occur.' },
+    'Brownie Cookie': { contains: ['Wheat', 'Milk', 'Eggs', 'Soy'], note: 'Made in a kitchen that handles peanuts, tree nuts, sesame, and other major allergens; cross-contact may occur.' }
+    // 'Banana Pudding': not provided yet
   };
+  // Full ingredient lists (in descending order by weight, as on the box label). Add each one as
+  // the bakery provides it, e.g. 'Chocolate Chip': 'Enriched flour (wheat flour, …), butter (milk), …'
+  const INGREDIENTS = {};
   const FLAVORS = Object.keys(PRICES);
   // allergens contained across a set of flavors (in a stable order)
   const ALLERGEN_ORDER = ['Wheat', 'Milk', 'Eggs', 'Soy'];
   const allergensIn = (flavors) => ALLERGEN_ORDER.filter(a => flavors.some(f => (ALLERGENS[f] || { contains: [] }).contains.includes(a)));
+  const allergensPending = (flavors) => flavors.filter(f => !ALLERGENS[f]);
   const BOX_SIZES = [4, 6, 12];
   const MAX_COOKIES = BOX_SIZES[BOX_SIZES.length - 1];
   const DELIVERY_PER_MILE = 100;          // cents; local delivery is $1 per mile, per order
@@ -58,9 +70,8 @@
 
   const money = (cents) => `$${(cents / 100).toFixed(2)}`;
   const moneyShort = (cents) => (cents % 100 ? money(cents) : `$${cents / 100}`);
-  // Display name: the menu context already says "cookies", so cards and lists drop the suffix.
-  // Internal flavor ids (PRICES keys, saved boxes, orders) keep the full name.
-  const label = (flavor) => flavor.replace(/ Cookies$/, '');
+  // Display name = the flavor's exact name (kept as a hook in case display names ever differ).
+  const label = (flavor) => flavor;
   const listSizes = () => `${BOX_SIZES.slice(0, -1).join(', ')}, or ${BOX_SIZES[BOX_SIZES.length - 1]}`;
   const plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
 
@@ -145,7 +156,7 @@
   const migrate = (raw) => {
     const out = { ...(raw || {}) };
     Object.keys(RENAMED).forEach(old => {
-      if (old in out) { out[RENAMED[old]] = (Number(out[RENAMED[old]]) || 0) + (Number(out[old]) || 0); delete out[old]; }
+      if (old in out && RENAMED[old] !== old) { out[RENAMED[old]] = (Number(out[RENAMED[old]]) || 0) + (Number(out[old]) || 0); delete out[old]; }
     });
     return out;
   };
@@ -218,7 +229,7 @@
 
   // Expose the model (read-only snapshot + validation) for the order form and tests.
   window.DoughBox = {
-    FLAVORS, PRICES, ALLERGENS, allergensIn, BOX_SIZES, MAX_COOKIES,
+    FLAVORS, PRICES, ALLERGENS, INGREDIENTS, allergensIn, allergensPending, BOX_SIZES, MAX_COOKIES,
     DELIVERY_PER_MILE, MAX_DELIVERY_MILES, checkDistance,
     setDistanceProvider, get distanceProvider() { return distanceProvider; },
     sanitize, totals, validate, message, progress, sizeLabel, listSizes, money, moneyShort, label, deliveryFee, orderTotal,
@@ -244,7 +255,14 @@
     document.querySelectorAll('[data-db]').forEach(el => { if (el.dataset.db in bind) el.textContent = bind[el.dataset.db]; });
     document.querySelectorAll('[data-allergens-for]').forEach(el => {
       const a = ALLERGENS[el.dataset.allergensFor];
-      if (a) el.innerHTML = `<strong>Contains: ${a.contains.join(', ')}.</strong> <span>${a.note}</span>`;
+      el.classList.toggle('is-pending', !a);
+      el.innerHTML = a
+        ? `<strong>Contains: ${a.contains.join(', ')}.</strong> <span>${a.note}</span>`
+        : '<strong>Allergen details coming soon.</strong> <span>Please call, text, or email us before ordering if you have any food allergies.</span>';
+    });
+    document.querySelectorAll('[data-ingredients-for]').forEach(el => {
+      const list = INGREDIENTS[el.dataset.ingredientsFor];
+      el.textContent = list || 'Full ingredient list coming soon — ask us anytime.';
     });
     document.querySelectorAll('[data-price-for]').forEach(el => {
       const f = el.dataset.priceFor;
@@ -314,7 +332,8 @@
     const formRows = FLAVORS.map(flavor => {
       const li = document.createElement('li');
       li.className = 'builder-row';
-      li.innerHTML = `<span class="builder-name">${label(flavor)}<small>${money(PRICES[flavor])} each · contains ${ALLERGENS[flavor].contains.join(', ').toLowerCase()}</small></span>`;
+      const alg = ALLERGENS[flavor] ? `contains ${ALLERGENS[flavor].contains.join(', ').toLowerCase()}` : 'allergen details coming soon';
+      li.innerHTML = `<span class="builder-name">${label(flavor)}<small>${money(PRICES[flavor])} each · ${alg}</small></span>`;
       const stepper = makeStepper(flavor, 'sm');
       li.append(stepper);
       formList && formList.append(li);
@@ -435,8 +454,11 @@
         submitBtn.disabled = !v.ok;
         if (boxAllergens) {
           boxAllergens.hidden = !v.lines.length;
+          const flavors = v.lines.map(l => l.flavor);
+          const pending = allergensPending(flavors);
           boxAllergens.innerHTML = v.lines.length
-            ? `<strong>Allergens in your box:</strong> contains ${allergensIn(v.lines.map(l => l.flavor)).join(', ').toLowerCase()}. Our kitchen handles peanuts, tree nuts, sesame, soy, and other major allergens; cross-contact may occur.`
+            ? `<strong>Allergens in your box:</strong> contains ${allergensIn(flavors).join(', ').toLowerCase()}. Our kitchen handles peanuts, tree nuts, sesame, soy, and other major allergens; cross-contact may occur.`
+              + (pending.length ? ` <em>Allergen details for ${pending.join(', ')} are coming soon — please ask us before ordering if you have allergies.</em>` : '')
             : '';
         }
         hiddenBox.value = v.lines.map(l => `${l.qty} x ${l.flavor} (${money(l.lineTotal)})`).join('; ')

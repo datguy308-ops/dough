@@ -173,7 +173,7 @@ document.addEventListener('DOMContentLoaded', () => {
       `Name: ${order.name}`,
       `Email: ${order.email}`,
       order.phone ? `Phone: ${order.phone}` : null,
-      `Delivery date: ${order.deliveryDate}`,
+      `Delivery date: ${order.deliveryDate} (${order.deliveryWindow})`,
       `Delivery address: ${order.delivery.address}`,
       order.delivery.instructions ? `Delivery instructions: ${order.delivery.instructions}` : null,
       '',
@@ -182,7 +182,9 @@ document.addEventListener('DOMContentLoaded', () => {
       `Cookie subtotal: ${DB.money(order.cookiesTotal)} (tax included)`,
       `Delivery: ${order.delivery.fee === null ? `${perMile} per mile, to be confirmed` : `${order.delivery.miles} mi, ${DB.money(order.delivery.fee)}`}`,
       order.total === null ? null : `Total: ${DB.money(order.total)}`,
-      `Allergens in this box: contains ${order.allergens.join(', ')}. Cross-contact with other major allergens may occur.`,
+      `Allergens in this box: contains ${order.allergens.join(', ')}. Cross-contact with other major allergens may occur.`
+        + (order.allergensPending.length ? ` Allergen details still to be confirmed for: ${order.allergensPending.join(', ')}.` : ''),
+      `Promotional emails/texts: ${order.marketing.optIn ? 'yes, opted in' : 'no'}`,
       order.notes ? `\nNotes & allergies: ${order.notes}` : null
     ];
     return lines.filter(l => l !== null).join('\n');
@@ -193,8 +195,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const first = order.name.split(' ')[0];
     $('confirmTitle').textContent = sent ? `Thank you, ${first} — we got your order request ♡` : `Thank you, ${first} ♡`;
     $('confirmLead').textContent = sent
-      ? 'Here’s what you asked for. This is an order request — nothing has been charged, and your order isn’t final until we confirm it.'
-      : 'Here’s your order request. Nothing has been charged, and your order isn’t final until we confirm it.';
+      ? 'Here’s what you asked for. This is an order request — nothing has been charged, and your order isn’t final until we confirm it. When we confirm, we’ll send you a Square payment link for the full amount.'
+      : 'Here’s your order request. Nothing has been charged, and your order isn’t final until we confirm it. When we confirm, we’ll send you a Square payment link for the full amount.';
 
     const offline = $('confirmOffline');
     offline.hidden = sent;
@@ -209,21 +211,22 @@ document.addEventListener('DOMContentLoaded', () => {
     const line = (text, cls) => { const li = document.createElement('li'); li.textContent = text; if (cls) li.className = cls; receipt.append(li); };
     line(`Box of ${order.boxSize} · ${order.totalFlavors} ${order.totalFlavors === 1 ? 'flavor' : 'flavors'}`, 'receipt-head');
     order.box.forEach(l => line(`${l.qty} × ${DB.label(l.flavor)} — ${DB.money(l.lineTotal)}`));
-    line(`Cookie subtotal — ${DB.money(order.cookiesTotal)} (tax included)`, 'order-receipt-total');
+    line(`Cookie subtotal — ${DB.money(order.cookiesTotal)} (includes any applicable sales tax)`, 'order-receipt-total');
     line(order.delivery.fee === null
       ? `Delivery — ${perMile} per mile, to be confirmed`
       : `Delivery · ${order.delivery.miles} mi — ${DB.money(order.delivery.fee)}`);
     line(order.total === null
       ? `Total — ${DB.money(order.cookiesTotal)} + delivery`
       : `Total — ${DB.money(order.total)}`, 'order-receipt-total');
-    line(`Delivery date: ${new Date(order.deliveryDate + 'T12:00').toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' })}`, 'order-receipt-note');
+    line(`Delivery: ${new Date(order.deliveryDate + 'T12:00').toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' })} · preferred ${order.deliveryWindow.toLowerCase()}`, 'order-receipt-note');
     line(`Deliver to: ${order.delivery.address}`, 'order-receipt-note');
     if (order.delivery.instructions) line(`Instructions: ${order.delivery.instructions}`, 'order-receipt-note');
-    line(`Allergens: contains ${order.allergens.join(', ').toLowerCase()}; cross-contact with other major allergens may occur.`, 'order-receipt-note');
+    line(`Allergens: contains ${order.allergens.join(', ').toLowerCase()}; cross-contact with other major allergens may occur.`
+      + (order.allergensPending.length ? ` Allergen details for ${order.allergensPending.join(', ')} are coming soon — we'll go over them with you.` : ''), 'order-receipt-note');
 
     $('confirmNext').textContent = sent
-      ? 'Dough Bunny will reach out to confirm your order, delivery date, and delivery fee.'
-      : 'Once we have it, Dough Bunny will reach out to confirm your order, delivery date, and delivery fee.';
+      ? 'Dough Bunny will reach out to confirm your order, delivery time, and delivery fee — then send your Square payment link.'
+      : 'Once we have it, Dough Bunny will reach out to confirm your order, delivery time, and delivery fee — then send your Square payment link.';
 
     form.hidden = true;
     confirmBox.hidden = false;
@@ -268,7 +271,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ? 'Please add your delivery address (and fill in any other missing details).'
         : missing.length === 1 && missing[0] === agree
           ? 'Please confirm you\'ve read the order policies and allergen information.'
-          : 'Please fill in your name, a valid email, and a delivery date.';
+          : 'Please fill in your name, a valid email, a delivery date, and a preferred delivery time.';
       (missing[0] || email).focus();
       return;
     }
@@ -294,6 +297,7 @@ document.addEventListener('DOMContentLoaded', () => {
         email: email.value.trim(),
         phone: form.elements.phone.value.trim(),
         deliveryDate: form.elements.date.value,
+        deliveryWindow: form.elements.deliveryWindow.value,
         notes: form.elements.message.value.trim(),
         box: box.lines,                 // [{ flavor, qty, price, lineTotal }, ...] (cents)
         boxSize: box.size,              // 4, 6, or 12
@@ -301,7 +305,14 @@ document.addEventListener('DOMContentLoaded', () => {
         totalFlavors: box.flavors,
         cookiesTotal: box.subtotal,     // cents, sales tax included
         allergens: DB.allergensIn(box.lines.map(l => l.flavor)),
+        allergensPending: DB.allergensPending(box.lines.map(l => l.flavor)),
         agreedToPolicies: agree.checked,
+        // optional, separate marketing consent — never required to order
+        marketing: {
+          optIn: form.elements.marketing.checked,
+          consentText: form.elements.marketing.checked ? document.getElementById('marketingText').textContent.trim() : null,
+          at: form.elements.marketing.checked ? new Date().toISOString() : null
+        },
         delivery: {
           address: addressInput.value.trim(),
           instructions: instructionsInput.value.trim(),

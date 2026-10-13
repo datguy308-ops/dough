@@ -45,7 +45,7 @@
   const FLAVORS = {
     choc: { seed: 11, light: '#EBBE86', mid: '#D7A062', edge: '#AE7036' },
     strawberry: { seed: 23, light: '#FAD3DA', mid: '#F0B2BF', edge: '#D2869A' },
-    cutout: { seed: 31, light: '#F6E1B8', mid: '#EBCB93', edge: '#CFA266', petals: 6 },
+    cutout: { seed: 31, light: '#F6E1B8', mid: '#EBCB93', edge: '#CFA266', bunny: true },   // Frosted Butter Cookie: our bunny shape
     snicker: { seed: 41, light: '#F2D3A2', mid: '#E4BB82', edge: '#BF8A4E' },
     banana: { seed: 53, light: '#F8EBBE', mid: '#EFD994', edge: '#CDAA5C' },
     brownie: { seed: 61, light: '#744632', mid: '#5A3322', edge: '#3A1F14' },
@@ -75,7 +75,38 @@
       </filter>
     </defs>`);
 
-    const body = blob(100, 98, 80, 0.07, f.petals ? 72 : 22, rand, f.petals);
+    // The Frosted Butter Cookie is cut in the shape of a bunny (head + two ears).
+    if (f.bunny) {
+      const svg = document.createElementNS(NS, 'svg');
+      svg.setAttribute('viewBox', '0 0 200 200');
+      svg.setAttribute('aria-hidden', 'true');
+      svg.setAttribute('focusable', 'false');
+      const shape = (dx = 0) => `
+        <ellipse cx="${72 + dx}" cy="62" rx="19" ry="44" transform="rotate(-14 ${72 + dx} 62)"/>
+        <ellipse cx="${128 - dx}" cy="62" rx="19" ry="44" transform="rotate(14 ${128 - dx} 62)"/>
+        <circle cx="100" cy="124" r="62"/>`;
+      const dots = [];
+      for (let i = 0; i < 40; i++) {
+        const a = (i / 40) * Math.PI * 2;
+        dots.push(`<circle cx="${(100 + Math.cos(a) * 50).toFixed(1)}" cy="${(126 + Math.sin(a) * 50).toFixed(1)}" r="1.9" fill="#fff" opacity=".95"/>`);
+      }
+      svg.innerHTML = out.join('') + `
+        <g fill="url(#${id}g)" filter="url(#${id}s)">${shape()}</g>
+        <g fill="#CDB6EE" transform="translate(100 118) scale(.84) translate(-100 -118)">${shape(2)}</g>
+        <ellipse cx="73" cy="64" rx="8" ry="27" transform="rotate(-14 73 64)" fill="#F2B8C8"/>
+        <ellipse cx="127" cy="64" rx="8" ry="27" transform="rotate(14 127 64)" fill="#F2B8C8"/>
+        ${dots.join('')}
+        <circle cx="80" cy="120" r="5.5" fill="#45305E"/><circle cx="120" cy="120" r="5.5" fill="#45305E"/>
+        <circle cx="82" cy="118" r="1.8" fill="#fff"/><circle cx="122" cy="118" r="1.8" fill="#fff"/>
+        <path d="M95 132 Q100 137 105 132 Q100 129 95 132Z" fill="#E58FA8"/>
+        <path d="M92 140 Q100 147 108 140" fill="none" stroke="#45305E" stroke-width="2.4" stroke-linecap="round"/>
+        <ellipse cx="68" cy="138" rx="9" ry="5.5" fill="#F2B8C8" opacity=".75"/><ellipse cx="132" cy="138" rx="9" ry="5.5" fill="#F2B8C8" opacity=".75"/>
+        <g fill="url(#${id}h)">${shape()}</g>`;
+      el.appendChild(svg);
+      return;
+    }
+
+    const body = blob(100, 98, 80, 0.07, 22, rand);
     out.push(`<path d="${body}" fill="url(#${id}g)" filter="url(#${id}s)"/>`);
 
     // subtle baked texture
@@ -124,19 +155,6 @@
         chips(5, ['#C9475F'], 4);
         drizzle('#FFFBF5');
         break;
-      case 'cutout': {
-        out.push(`<path d="${blob(100, 98, 64, 0, 72, rand, 6)}" fill="#CDB6EE"/>`);
-        out.push(`<path d="${blob(100, 98, 64, 0, 72, rand, 6)}" fill="none" stroke="#fff" stroke-width="3" stroke-dasharray="0.1 7" stroke-linecap="round" opacity=".95"/>`);
-        out.push(`<circle cx="100" cy="98" r="15" fill="#FFF7EE"/><circle cx="100" cy="98" r="7" fill="#F2B8C8"/>`);
-        const sprinkle = ['#FFFFFF', '#F2B8C8', '#8E6BC4', '#F6D98B'];
-        for (let i = 0; i < 16; i++) {
-          const [x, y] = spot(rand, 48);
-          if (Math.hypot(x - 100, y - 98) < 20) continue;
-          const a = rand() * 180;
-          out.push(`<rect x="${(x - 4).toFixed(1)}" y="${(y - 1.3).toFixed(1)}" width="8" height="2.6" rx="1.3" fill="${sprinkle[i % 4]}" transform="rotate(${a.toFixed(0)} ${x.toFixed(1)} ${y.toFixed(1)})"/>`);
-        }
-        break;
-      }
       case 'snicker':
         crack(9, f.edge, 0.55);
         for (let i = 0; i < 70; i++) {

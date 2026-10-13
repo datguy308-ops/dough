@@ -7,7 +7,8 @@ Website for Dough Bunny, a Florida home bakery making homemade cookies & treats 
 - `index.html` — single-page site, laid out like pages of a bakery scrapbook: hero collage + "Build Your Box" CTA, Why Dough Bunny?, What's Baking (spotlight + Batch No. ticket), the cookie jar (Step 1 box size → Step 2 flavors, recipe-card tiles), Made by Hand (recipe card, sticky note, polaroids), Our Kitchen (letter + love-notes placeholder), How to Order + order form (01 Your information · 02 Your cookie box · 03 Delivery) and confirmation, FAQ, footer. A hidden SVG sprite at the top holds the hand-drawn doodles and the "Baked with love · Est. 2026" stamp.
 - `css/style.css` — design tokens (cream / deep purple / lavender / pink / butter / cookie brown), Fraunces + Caveat + Nunito Sans, paper grain, torn page edges, gingham, washi tape, paper shadows. Paper objects tilt via `--tilt` (the `rotate` property) so reveals (`translate`) never fight with it.
 - `js/cookies.js` — draws the illustrated SVG cookie for each flavor (`data-cookie="choc|strawberry|cutout|snicker|banana|brownie|smores"`).
-- `js/box.js` — the Build Your Box model, pricing, and box UI. **All business values live here**: `PRICES` (per large cookie, cents, tax included), `BOX_SIZES` (4, 6, 12 — the total must be exactly one of these; 12 is the per-order max), `DELIVERY_PER_MILE` ($1), `MAX_DELIVERY_MILES` (20). The page never hard-codes them: card prices use `data-price-for="<flavor id>"`, and copy uses `data-db="max-miles | per-mile | box-sizes"`, which `box.js` fills in. `validate()` is the single rule (reuse it server-side). The chosen box size (`setTarget`) only guides the UI — size picker, the little box meter, "add N more" copy. Saved in localStorage (`doughbunny.box.v1`: items + chosen size) and shared by the card steppers, the form's builder, the floating box sticker, and the box summary. Flavor ids keep the full names (e.g. "Strawberry Shortcake Cookies"); `DoughBox.label()` shows the short name on screen.
+- `js/box.js` — the Build Your Box model, pricing, and box UI. **All business values live here**: `PRICES` (per large cookie, cents, tax included), `BOX_SIZES` (4, 6, 12 — the total must be exactly one of these; 12 is the per-order max), `DELIVERY_PER_MILE` ($1), `MAX_DELIVERY_MILES` (20). The page never hard-codes them: card prices use `data-price-for="<flavor id>"`, and copy uses `data-db="max-miles | per-mile | box-sizes"`, which `box.js` fills in. `validate()` is the single rule (reuse it server-side). The chosen box size (`setTarget`) only guides the UI — size picker, the little box meter, "add N more" copy. Saved in localStorage (`doughbunny.box.v1`: items + chosen size) and shared by the card steppers, the form's builder, the floating box sticker, and the box summary. Flavor ids are the exact cookbook names (e.g. "Strawberry Shortcake"); older saved boxes are migrated via `RENAMED`.
+- `privacy.html` — privacy policy (Square, Gmail, Google Fonts, marketing opt-in, local storage). Name the form and maps providers there before turning them on.
 - `js/main.js` — header, mobile nav, scroll reveal, hero parallax, delivery distance/fee display, order submit + confirmation.
 - `assets/images/` — `logo.jpg` (round brand mark), `logo-wordmark.webp` (full logo, upscaled), favicon / touch icon / og image; `original/` keeps the source logo.
 - `assets/graphics/` — illustration library (see its README for the upscaling pipeline).
@@ -35,24 +36,22 @@ DoughOrders.setSubmitHandler(async (order) => {
 });
 ```
 
-`order` contains the customer info, `box` (`[{ flavor, qty, price, lineTotal }]`, cents), `boxSize`, `cookiesTotal`, `delivery` (`address`, `instructions`, `miles`, `fee`), and `total`. Re-check the box size and recompute the totals from `PRICES` on the server — the browser check can't stop a hand-crafted request. Until a handler is registered, the confirmation clearly says the request was **not** sent and offers a pre-written email to the bakery plus the phone number.
+`order` contains the customer info, `deliveryDate`, `deliveryWindow`, `notes`, `agreedToPolicies`, `marketing` (`optIn`, the exact consent text shown, timestamp — keep this as your consent record), `allergens` / `allergensPending`, `box` (`[{ flavor, qty, price, lineTotal }]`, cents), `boxSize`, `cookiesTotal`, `delivery` (`address`, `instructions`, `miles`, `fee`), and `total`. Re-check the box size and recompute the totals from `PRICES` on the server — the browser check can't stop a hand-crafted request. Until a handler is registered, the confirmation clearly says the request was **not** sent and offers a pre-written email to the bakery plus the phone number.
 
 ## Business info on the site (from the website information form)
 
 - Contact: (786) 759-6369 · doughbunnybakery@gmail.com · Instagram @dough_bunny (no Facebook).
-- Menu: Chocolate Chip, Strawberry Shortcake, Frosted Butter, Natilla Snickerdoodle, Crackly-Top Brownie, S'mores. Banana Pudding (and Matcha / Vanilla Matcha / Spice) must not be added.
-- Allergens per flavor live in `ALLERGENS` in `js/box.js` (the cards, the order form summary, and the order all read from it).
-- Approved claims: made from scratch, made in small batches. "Baked fresh to order" was not approved — don't add it back.
-- Policies (cancellation, refund, failed delivery, unavailable at delivery, same-day "only if available") are shown verbatim in the Order Policies section and FAQ.
+- Menu (exact cookbook names, no others): Chocolate Chip, Snickerdoodle, S'mores, Strawberry Shortcake, Frosted Butter Cookie (the signature, bunny-shaped), Banana Pudding, Brownie Cookie.
+- Allergens per flavor live in `ALLERGENS` in `js/box.js`; Banana Pudding's are still pending and show "coming soon". Full ingredient lists go in `INGREDIENTS` (all pending); each card's "Ingredients" section fills in automatically.
+- Approved claims: made from scratch, small batches, real butter, pure vanilla extract, whole eggs, real chocolate, hand-piped frosting, rolled and cut by hand. Not approved yet: "no artificial preservatives", "real fruit", "baked fresh to order", shelf-stability.
+- Payment: Square payment link, full amount when the order is confirmed. Prices include any applicable sales tax.
+- Policies (cancellation before delivery, refund, failed delivery, unavailable at delivery, same-day "only if available") are shown in the Order Policies section and FAQ.
 - Florida cottage food: F.S. 500.80; the required sentence appears in the menu notice, policies, and footer. The kitchen address must never appear on the site.
 - Reviews stay empty until real, approved reviews are provided.
 
 ## Before launch
 
-See the launch checklist given with this update (hosting, order sending, payment, sales tax, labels, privacy policy). Still open on the site itself:
-- How customers pay (add to Order Policies + FAQ once decided).
-- A privacy policy page (the form collects name, email, phone, and address).
-- Real reviews, once approved.
+Still open: Banana Pudding allergens; all ingredient lists; delivery days/times; partial-mile rounding; confirmation response time; form, maps and hosting providers (then name them in `privacy.html`); data retention period; Our Kitchen letter; cookie photos; real reviews.
 
 ## Running locally
 

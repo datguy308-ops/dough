@@ -1054,6 +1054,32 @@ main > section, .site-footer { overflow-x: clip; }
   .order-totals .ot-total { font-size: 1.05rem; }
 }
 
+
+/* ingredients, pending allergens, optional consent, privacy page */
+.tile-allergens.is-pending strong { color: var(--pink-ink); }
+.tile-ingredients { margin: -6px 0 14px; font-size: .82rem; }
+.tile-ingredients summary { display: inline-flex; align-items: center; gap: 6px; cursor: pointer; list-style: none; min-height: 32px; font-weight: 800; color: var(--plum); border-bottom: 2px dashed var(--lav-soft); }
+.tile-ingredients summary::-webkit-details-marker { display: none; }
+.tile-ingredients summary::after { content: '+'; font-weight: 800; color: var(--lav-ink); }
+.tile-ingredients[open] summary::after { content: '−'; }
+.tile-ingredients p { margin: 8px 0 0; color: var(--muted); line-height: 1.5; }
+.box-allergens em { display: block; margin-top: 4px; font-style: normal; font-weight: 700; color: var(--pink-ink); }
+.agree--optional { font-weight: 500; color: var(--muted); font-size: .86rem; }
+.agree--optional strong { color: var(--plum); }
+.privacy-note { margin: 4px 0 0; font-size: .84rem; color: var(--muted); }
+.privacy-note a { color: var(--plum); font-weight: 700; border-bottom: 2px solid var(--pink); }
+
+.legal-main { padding: 120px 0 80px; overflow-x: clip; }
+.legal-card h1 { font-size: clamp(2rem, 4vw, 2.8rem); margin-bottom: .2em; }
+.legal-card h2 { font-size: 1.3rem; margin: 1.6em 0 .5em; }
+.legal-card p, .legal-card li { color: var(--ink); font-size: .98rem; }
+.legal-card ul { list-style: disc; padding-left: 1.3em; margin: 0 0 1em; }
+.legal-card li { margin-bottom: .35em; }
+.legal-card a { color: var(--plum); font-weight: 700; border-bottom: 2px solid var(--pink); }
+.legal-updated { font-family: var(--font-hand); font-size: 1.3rem; color: var(--lav-ink) !important; }
+.legal-back { margin-top: 2em; }
+.legal-page .site-header .btn { box-shadow: 2px 3px 0 var(--pink); }
+
 /* ==========================================================================
    RESPONSIVE
    ========================================================================== */
