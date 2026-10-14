@@ -239,8 +239,8 @@
     };
     document.querySelectorAll('[data-db]').forEach(el => { if (el.dataset.db in bind) el.textContent = bind[el.dataset.db]; });
     document.querySelectorAll('[data-delivery-rates]').forEach(ul => {
-      ul.innerHTML = DELIVERY_RATES.map((r, i) =>
-        `<li><span>${i === 0 ? `${r.from}–${r.upTo}` : `Over ${r.from}–${r.upTo}`} miles</span><strong>${moneyShort(r.fee)}</strong></li>`).join('');
+      ul.innerHTML = DELIVERY_RATES.map(r =>
+        `<li><span>${r.from}–${r.upTo} miles</span><strong>${moneyShort(r.fee)}</strong></li>`).join('');
     });
     document.querySelectorAll('[data-allergens-for]').forEach(el => {
       const a = ALLERGENS[el.dataset.allergensFor];
