@@ -13,7 +13,10 @@
    - a box holds exactly 4, 6, or 12 cookies in total, mixed freely
    - 12 is the most a customer can order
    - prices are per large cookie and already include sales tax
-   - every order is delivered (no pickup): $1 per mile, once per order, up to 20 miles away
+   - every order is delivered (no pickup), flat fee per order by one-way driving distance:
+     0–5 mi $5 · over 5–10 mi $8 · over 10–15 mi $12 · over 15–20 mi $16; over 20 mi is outside
+     the standard area. The owner checks the distance and confirms the fee by hand — the site
+     never calculates it.
    - money is handled in whole cents
    ========================================================================== */
 (function () {
@@ -64,8 +67,16 @@
   const allergensPending = (flavors) => flavors.filter(f => !ALLERGENS[f]);
   const BOX_SIZES = [4, 6, 12];
   const MAX_COOKIES = BOX_SIZES[BOX_SIZES.length - 1];
-  const DELIVERY_PER_MILE = 100;          // cents; local delivery is $1 per mile, per order
-  const MAX_DELIVERY_MILES = 20;          // we don't deliver farther than this
+  // Flat delivery fee per order (cents) by one-way driving distance, up to `upTo` miles.
+  // For display only: the owner confirms each order's fee after checking the address.
+  const DELIVERY_RATES = [
+    { from: 0, upTo: 5, fee: 500 },
+    { from: 5, upTo: 10, fee: 800 },
+    { from: 10, upTo: 15, fee: 1200 },
+    { from: 15, upTo: 20, fee: 1600 }
+  ];
+  const MAX_DELIVERY_MILES = DELIVERY_RATES[DELIVERY_RATES.length - 1].upTo;   // standard delivery area
+  const DELIVERY_PENDING = 'Delivery fee pending confirmation';
   const STORAGE_KEY = 'doughbunny.box.v1';
 
   const money = (cents) => `$${(cents / 100).toFixed(2)}`;
@@ -123,26 +134,6 @@
     if (v.ok) return v.full ? 'Box of 12 — your box is full ♡' : `Box of ${v.size} ready ♡`;
     const add = `Add ${plural(v.addNeeded, 'more', 'more')} for a box of ${v.next}`;
     return v.prev ? `${add} — or remove ${v.removeNeeded} for a box of ${v.prev}` : `${add} ♡`;
-  }
-
-  // Check a delivery distance (miles from the kitchen, from the maps service).
-  // status: 'unknown' (blank), 'invalid', 'too-far', or 'ok'.
-  function checkDistance(miles) {
-    if (miles === null || miles === undefined || String(miles).trim() === '') return { status: 'unknown', fee: null };
-    const m = Number(miles);
-    if (!Number.isFinite(m) || m <= 0) return { status: 'invalid', fee: null };
-    if (m > MAX_DELIVERY_MILES) return { status: 'too-far', fee: null, miles: m };
-    return { status: 'ok', fee: Math.round(m * DELIVERY_PER_MILE), miles: m };
-  }
-
-  // Delivery fee in cents; null when the distance is blank, invalid, or beyond the limit.
-  function deliveryFee(miles) { return checkDistance(miles).fee; }
-
-  // Cookies (tax included) + delivery. Delivery fee is null while the distance is still to be confirmed.
-  function orderTotal(items, delivery, miles) {
-    const v = validate(items);
-    const fee = delivery ? deliveryFee(miles) : 0;
-    return { cookies: v.subtotal, delivery: fee, total: fee === null ? null : v.subtotal + fee };
   }
 
   function sizeLabel(n) {
@@ -220,19 +211,11 @@
   }
   const onChange = (fn) => listeners.push(fn);
 
-  // Distance lookup hook for the maps service (added later):
-  //   DoughBox.setDistanceProvider(async (address) => milesFromKitchen)
-  // Keep the kitchen address and maps API key on the server side of that call —
-  // anything in this file or the page is visible to visitors.
-  let distanceProvider = null;
-  const setDistanceProvider = (fn) => { distanceProvider = typeof fn === 'function' ? fn : null; };
-
   // Expose the model (read-only snapshot + validation) for the order form and tests.
   window.DoughBox = {
     FLAVORS, PRICES, ALLERGENS, INGREDIENTS, allergensIn, allergensPending, BOX_SIZES, MAX_COOKIES,
-    DELIVERY_PER_MILE, MAX_DELIVERY_MILES, checkDistance,
-    setDistanceProvider, get distanceProvider() { return distanceProvider; },
-    sanitize, totals, validate, message, progress, sizeLabel, listSizes, money, moneyShort, label, deliveryFee, orderTotal,
+    DELIVERY_RATES, MAX_DELIVERY_MILES, DELIVERY_PENDING,
+    sanitize, totals, validate, message, progress, sizeLabel, listSizes, money, moneyShort, label,
     get items() { return { ...items }; },
     get target() { return activeTarget(validate(items)); },
     set, change, clear, onChange, setTarget,
@@ -249,10 +232,16 @@
     // Fill copy that mirrors business values, so the page never drifts from the rules above.
     const bind = {
       'max-miles': String(MAX_DELIVERY_MILES),
-      'per-mile': moneyShort(DELIVERY_PER_MILE),
+      'delivery-from': moneyShort(DELIVERY_RATES[0].fee),
+      'delivery-range': `${moneyShort(DELIVERY_RATES[0].fee)}–${moneyShort(DELIVERY_RATES[DELIVERY_RATES.length - 1].fee)}`,
+      'delivery-fees': DELIVERY_RATES.map(r => moneyShort(r.fee)).join(', ').replace(/, ([^,]+)$/, ', or $1'),
       'box-sizes': listSizes()
     };
     document.querySelectorAll('[data-db]').forEach(el => { if (el.dataset.db in bind) el.textContent = bind[el.dataset.db]; });
+    document.querySelectorAll('[data-delivery-rates]').forEach(ul => {
+      ul.innerHTML = DELIVERY_RATES.map((r, i) =>
+        `<li><span>${i === 0 ? `${r.from}–${r.upTo}` : `Over ${r.from}–${r.upTo}`} miles</span><strong>${moneyShort(r.fee)}</strong></li>`).join('');
+    });
     document.querySelectorAll('[data-allergens-for]').forEach(el => {
       const a = ALLERGENS[el.dataset.allergensFor];
       el.classList.toggle('is-pending', !a);

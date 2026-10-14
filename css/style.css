@@ -845,9 +845,17 @@ main > section, .site-footer { overflow-x: clip; }
 
 
 /* delivery + order total */
-.delivery-distance { font-size: .9rem; font-weight: 600; color: var(--muted); margin: -8px 0 14px; }
-.delivery-distance.is-ok { color: var(--lav-ink); }
-.delivery-distance.is-warn { color: #A83A5A; }
+/* delivery rates: a quiet, expandable list under the delivery note */
+.delivery-rates { margin: -4px 0 16px; font-size: .9rem; }
+.delivery-rates summary { display: inline-flex; align-items: center; gap: 6px; cursor: pointer; list-style: none; min-height: 32px; font-weight: 800; color: var(--plum); border-bottom: 2px dashed var(--lav-soft); }
+.delivery-rates summary::-webkit-details-marker { display: none; }
+.delivery-rates summary::after { content: '+'; font-weight: 800; color: var(--lav-ink); }
+.delivery-rates[open] summary::after { content: '−'; }
+.rate-list { display: grid; gap: 2px; max-width: 280px; margin: 10px 0 8px; }
+.rate-list li { display: flex; justify-content: space-between; gap: 12px; padding: 3px 0; border-bottom: 1px dotted rgba(168, 111, 76, .3); color: var(--ink); }
+.rate-list strong { color: var(--plum); font-variant-numeric: tabular-nums; }
+.delivery-rates p { margin: 6px 0 0; color: var(--muted); line-height: 1.5; }
+.submit-note { position: relative; z-index: 1; margin: 10px 0 0; text-align: center; font-size: .85rem; font-weight: 600; color: var(--muted); }
 .order-receipt-note { font-weight: 600 !important; color: var(--muted) !important; font-size: .88rem; }
 .delivery-fields[hidden] { display: none; }
 
@@ -861,6 +869,7 @@ main > section, .site-footer { overflow-x: clip; }
 .field input[aria-invalid="true"] { border-color: #C0506E; }
 .order-totals .ot-total { margin-top: 4px; padding-top: 8px; border-top: 1.5px dashed rgba(168, 111, 76, .35); font-family: var(--font-display); font-size: 1.2rem; color: var(--plum); }
 .order-totals p { margin: 6px 0 0; font-family: var(--font-hand); font-size: 1.2rem; font-weight: 700; color: var(--cookie-ink); line-height: 1.1; }
+.order-totals p + p { margin-top: 4px; font-family: inherit; font-size: .82rem; font-weight: 600; color: var(--muted); line-height: 1.4; }
 .box-panel-totals strong small { font-family: var(--font-body); font-size: .72rem; font-weight: 700; color: var(--muted); }
 
 /* box sizes: 4 / 6 / 12 tracker + prices */

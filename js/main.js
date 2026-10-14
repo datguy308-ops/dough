@@ -65,90 +65,26 @@ document.addEventListener('DOMContentLoaded', () => {
     dateInput.min = `${min.getFullYear()}-${pad(min.getMonth() + 1)}-${pad(min.getDate())}`;
   }
 
-  // ---------- Delivery + live order total ----------
-  // Every order is delivered; there is no pickup option. The distance comes from the
-  // customer's address via DoughBox.setDistanceProvider() (the maps service, added later).
-  // Until a provider is set, the fee is confirmed by reply. Values (miles, $/mile) come from DoughBox.
+  // ---------- Delivery + order summary ----------
+  // Every order is delivered; there is no pickup option. The site never works out a distance or a
+  // delivery fee: the owner checks the address, picks the flat rate (DoughBox.DELIVERY_RATES), and
+  // confirms the fee and full total before sending the Square payment link. So the summary shows the
+  // cookie subtotal only, with delivery "to be confirmed".
   const DB = window.DoughBox;
   const addressInput = document.getElementById('deliveryAddress');
   const instructionsInput = document.getElementById('deliveryInstructions');
-  const distanceNote = document.getElementById('deliveryDistance');
   const totalsBox = document.getElementById('orderTotals');
-  const perMile = DB.moneyShort(DB.DELIVERY_PER_MILE);
-
-  // distance lookup state for the current address
-  let dist = { address: '', status: 'none', miles: null };   // status: none | pending | ok | too-far | error | manual
-  let lookupId = 0;
-
-  function lookupDistance() {
-    const address = addressInput.value.trim();
-    const provider = DB.distanceProvider;
-    if (!address) { dist = { address, status: 'none', miles: null }; render(); return Promise.resolve(dist); }
-    if (!provider) { dist = { address, status: 'manual', miles: null }; render(); return Promise.resolve(dist); }
-    if (dist.address === address && dist.status !== 'pending' && dist.status !== 'error') return Promise.resolve(dist);
-    const id = ++lookupId;
-    dist = { address, status: 'pending', miles: null };
-    render();
-    return Promise.resolve()
-      .then(() => provider(address))
-      .then(miles => {
-        if (id !== lookupId) return dist;                       // a newer lookup is running
-        const c = DB.checkDistance(miles);
-        dist = { address, status: c.status === 'ok' ? 'ok' : c.status === 'too-far' ? 'too-far' : 'error', miles: c.miles ?? null };
-        render();
-        return dist;
-      })
-      .catch(() => {
-        if (id === lookupId) { dist = { address, status: 'error', miles: null }; render(); }
-        return dist;
-      });
-  }
-
-  let debounce;
-  addressInput.addEventListener('input', () => {
-    clearTimeout(debounce);
-    if (dist.address !== addressInput.value.trim()) { dist = { ...dist, status: DB.distanceProvider ? 'none' : dist.status }; render(); }
-    debounce = setTimeout(lookupDistance, 700);
-  });
-  addressInput.addEventListener('change', () => { clearTimeout(debounce); lookupDistance(); });
-
-  function distanceText() {
-    const max = DB.MAX_DELIVERY_MILES;
-    const connected = !!DB.distanceProvider;
-    const fee = dist.status === 'ok' ? DB.deliveryFee(dist.miles) : null;
-    return {
-      none: connected
-        ? 'Enter your address to see your exact delivery fee.'
-        : `Your exact delivery fee (${perMile} per mile) will be confirmed from your address when we reply.`,
-      manual: `We'll confirm your exact delivery fee (${perMile} per mile) from this address when we reply.`,
-      pending: 'Finding the distance from our kitchen…',
-      ok: `${dist.miles} miles from our kitchen · ${DB.money(fee || 0)} delivery ♡`,
-      'too-far': `Sorry — that's ${dist.miles} miles away, and we only deliver within ${max} miles of our kitchen.`,
-      error: `We couldn't find that address. Please double-check it — or we'll confirm the delivery fee when we reply.`
-    }[dist.status];
-  }
+  // enough of an address to check the driving distance by hand: needs a 5-digit ZIP code
+  const hasZip = (address) => /\b\d{5}(?:-\d{4})?\b/.test(address);
 
   function render() {
-    const max = DB.MAX_DELIVERY_MILES;
-    const fee = dist.status === 'ok' ? DB.deliveryFee(dist.miles) : null;
-    if (dist.status === 'too-far') addressInput.setAttribute('aria-invalid', 'true');
-    else if (addressInput.getAttribute('aria-invalid') === 'true' && addressInput.value.trim()) addressInput.removeAttribute('aria-invalid');
-
-    distanceNote.className = 'delivery-distance' + (dist.status === 'too-far' || dist.status === 'error' ? ' is-warn' : dist.status === 'ok' ? ' is-ok' : '');
-    const text = distanceText();
-    if (distanceNote.textContent !== text) distanceNote.textContent = text;   // don't re-announce unchanged text
-
     const box = DB.validate(DB.items);
     if (!box.cookies) { totalsBox.innerHTML = ''; return; }
-    const rows = [`<li><span>Cookie box · ${box.cookies} ${box.cookies === 1 ? 'cookie' : 'cookies'}</span><span>${DB.money(box.subtotal)}</span></li>`];
-    if (dist.status === 'ok') rows.push(`<li><span>Delivery · ${dist.miles} mi × ${perMile}</span><span>${DB.money(fee)}</span></li>`);
-    else if (dist.status === 'too-far') rows.push(`<li class="ot-warn"><span>Outside our ${max}-mile delivery area</span></li>`);
-    else if (dist.status === 'pending') rows.push(`<li><span>Delivery · ${perMile} per mile</span><span>calculating…</span></li>`);
-    else rows.push(`<li><span>Delivery · ${perMile} per mile</span><span>to be confirmed</span></li>`);
-    rows.push(dist.status === 'ok'
-      ? `<li class="ot-total"><span>Total</span><span>${DB.money(box.subtotal + fee)}</span></li>`
-      : `<li class="ot-total"><span>Total so far</span><span>${DB.money(box.subtotal)} + delivery</span></li>`);
-    totalsBox.innerHTML = `<ul>${rows.join('')}</ul><p>Sales tax is included in our prices.</p>`;
+    totalsBox.innerHTML = `<ul>
+      <li><span>Cookie subtotal · ${box.cookies} ${box.cookies === 1 ? 'cookie' : 'cookies'}</span><span>${DB.money(box.subtotal)}</span></li>
+      <li><span>Delivery fee</span><span>To be confirmed</span></li>
+      <li class="ot-total"><span>Cookie subtotal (delivery not included)</span><span>${DB.money(box.subtotal)}</span></li>
+    </ul><p>We'll confirm your delivery fee and full order total before payment ♡</p><p>Cookie prices include any applicable sales tax.</p>`;
   }
   DB.onChange(render);
   render();
@@ -179,9 +115,8 @@ document.addEventListener('DOMContentLoaded', () => {
       '',
       `Box of ${order.boxSize}:`,
       ...order.box.map(l => `  ${l.qty} x ${DB.label(l.flavor)} (${DB.money(l.lineTotal)})`),
-      `Cookie subtotal: ${DB.money(order.cookiesTotal)} (tax included)`,
-      `Delivery: ${order.delivery.fee === null ? `${perMile} per mile, to be confirmed` : `${order.delivery.miles} mi, ${DB.money(order.delivery.fee)}`}`,
-      order.total === null ? null : `Total: ${DB.money(order.total)}`,
+      `Cookie subtotal: ${DB.money(order.cookiesTotal)} (tax included; delivery not included)`,
+      `Status: ${order.status}`,
       `Allergens in this box: contains ${order.allergens.join(', ')}. Cross-contact with other major allergens may occur.`
         + (order.allergensPending.length ? ` Allergen details still to be confirmed for: ${order.allergensPending.join(', ')}.` : ''),
       `Promotional emails/texts: ${order.marketing.optIn ? 'yes, opted in' : 'no'}`,
@@ -211,13 +146,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const line = (text, cls) => { const li = document.createElement('li'); li.textContent = text; if (cls) li.className = cls; receipt.append(li); };
     line(`Box of ${order.boxSize} · ${order.totalFlavors} ${order.totalFlavors === 1 ? 'flavor' : 'flavors'}`, 'receipt-head');
     order.box.forEach(l => line(`${l.qty} × ${DB.label(l.flavor)} — ${DB.money(l.lineTotal)}`));
-    line(`Cookie subtotal — ${DB.money(order.cookiesTotal)} (includes any applicable sales tax)`, 'order-receipt-total');
-    line(order.delivery.fee === null
-      ? `Delivery — ${perMile} per mile, to be confirmed`
-      : `Delivery · ${order.delivery.miles} mi — ${DB.money(order.delivery.fee)}`);
-    line(order.total === null
-      ? `Total — ${DB.money(order.cookiesTotal)} + delivery`
-      : `Total — ${DB.money(order.total)}`, 'order-receipt-total');
+    line(`Cookie subtotal (delivery not included) — ${DB.money(order.cookiesTotal)} (includes any applicable sales tax)`, 'order-receipt-total');
+    line('Delivery fee — to be confirmed');
     line(`Delivery: ${new Date(order.deliveryDate + 'T12:00').toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' })} · preferred ${order.deliveryWindow.toLowerCase()}`, 'order-receipt-note');
     line(`Deliver to: ${order.delivery.address}`, 'order-receipt-note');
     if (order.delivery.instructions) line(`Instructions: ${order.delivery.instructions}`, 'order-receipt-note');
@@ -225,8 +155,8 @@ document.addEventListener('DOMContentLoaded', () => {
       + (order.allergensPending.length ? ` Allergen details for ${order.allergensPending.join(', ')} are coming soon — we'll go over them with you.` : ''), 'order-receipt-note');
 
     $('confirmNext').textContent = sent
-      ? 'Dough Bunny will reach out to confirm your order, delivery time, and delivery fee — then send your Square payment link.'
-      : 'Once we have it, Dough Bunny will reach out to confirm your order, delivery time, and delivery fee — then send your Square payment link.';
+      ? 'Dough Bunny will check your address and reach out to confirm your delivery fee, full order total, and delivery time — then send your Square payment link.'
+      : 'Once we have it, Dough Bunny will check your address and reach out to confirm your delivery fee, full order total, and delivery time — then send your Square payment link.';
 
     form.hidden = true;
     confirmBox.hidden = false;
@@ -254,6 +184,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const agree = document.getElementById('agreePolicies');
     const email = form.elements.email;
     const badEmail = !missing.includes(email) && !email.checkValidity();
+    const badAddress = !missing.includes(addressInput) && !hasZip(addressInput.value);
 
     if (!box.ok) {
       formNote.classList.add('is-error');
@@ -275,22 +206,17 @@ document.addEventListener('DOMContentLoaded', () => {
       (missing[0] || email).focus();
       return;
     }
+    if (badAddress) {
+      addressInput.setAttribute('aria-invalid', 'true');
+      formNote.classList.add('is-error');
+      formNote.textContent = 'Please include your full delivery address — street, city, state, and ZIP code — so we can confirm your delivery fee.';
+      addressInput.focus();
+      return;
+    }
 
     form.dataset.busy = '1';
     submitBtn.setAttribute('aria-busy', 'true');
     try {
-      // make sure the distance matches the address being submitted
-      clearTimeout(debounce);
-      const d = await lookupDistance();
-      if (d.status === 'too-far') {
-        addressInput.setAttribute('aria-invalid', 'true');
-        formNote.classList.add('is-error');
-        formNote.textContent = `Sorry — we only deliver within ${DB.MAX_DELIVERY_MILES} miles of our kitchen, so we can't take this order.`;
-        addressInput.focus();
-        return;
-      }
-      const fee = d.status === 'ok' ? DB.deliveryFee(d.miles) : null;
-
       // The order keeps the exact flavor breakdown, not just a count.
       const order = {
         name: form.elements.name.value.trim(),
@@ -316,10 +242,9 @@ document.addEventListener('DOMContentLoaded', () => {
         delivery: {
           address: addressInput.value.trim(),
           instructions: instructionsInput.value.trim(),
-          miles: fee === null ? null : d.miles,
-          fee                              // cents; null = distance to be confirmed
+          fee: null                        // set by the owner after checking the driving distance
         },
-        total: fee === null ? null : box.subtotal + fee   // cents; null until the distance is known
+        status: DB.DELIVERY_PENDING        // "Delivery fee pending confirmation"
       };
 
       let sent = false;
@@ -337,7 +262,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
       showConfirmation(order, sent);
       form.reset();
-      dist = { address: '', status: 'none', miles: null };
       DB.clear();
       render();
     } finally {

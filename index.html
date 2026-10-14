@@ -97,7 +97,7 @@
         <ul class="hero-promises">
           <li><svg aria-hidden="true"><use href="#d-check"/></svg>Boxes of <span data-db="box-sizes">4, 6, or 12</span> cookies</li>
           <li><svg aria-hidden="true"><use href="#d-check"/></svg>Mix &amp; match any flavors</li>
-          <li><svg aria-hidden="true"><use href="#d-check"/></svg>Local delivery within <span data-db="max-miles">20</span> miles</li>
+          <li><svg aria-hidden="true"><use href="#d-check"/></svg>Local delivery within <span data-db="max-miles">20</span> miles ♡</li>
         </ul>
       </div>
     </div>
@@ -143,7 +143,7 @@
       <li class="why-item reveal" style="--tilt:-1deg"><img src="assets/graphics/web/baking-tools/whisk.webp" alt="" loading="lazy" width="234" height="360"><strong>Small batches</strong><span>by the tray, never by the ton</span></li>
       <li class="why-item reveal" style="--tilt:2deg"><img src="assets/graphics/web/ingredients/butter-dish.webp" alt="" loading="lazy" width="360" height="239"><strong>Real butter &amp; pure vanilla</strong><span>plus whole eggs &amp; real chocolate</span></li>
       <li class="why-item reveal" style="--tilt:-1.5deg"><img src="assets/graphics/web/ingredients/cookie-stack-ribbon.webp" alt="" loading="lazy" width="360" height="334"><strong>Mix &amp; match boxes</strong><span><span data-db="box-sizes">4, 6, or 12</span> — any flavors you like</span></li>
-      <li class="why-item reveal" style="--tilt:1deg"><img src="assets/graphics/web/decorative/paw-print-a.webp" alt="" loading="lazy" width="217" height="220"><strong>Local delivery</strong><span>within <span data-db="max-miles">20</span> miles · <span data-db="per-mile">$1</span> per mile</span></li>
+      <li class="why-item reveal" style="--tilt:1deg"><img src="assets/graphics/web/decorative/paw-print-a.webp" alt="" loading="lazy" width="217" height="220"><strong>Local delivery</strong><span>within <span data-db="max-miles">20</span> miles ♡</span></li>
     </ul>
   </div>
 </section>
@@ -517,7 +517,7 @@
         <span class="step-num">step three</span>
         <img src="assets/graphics/web/decorative/ribbon-bow.webp" alt="" loading="lazy" width="388" height="356">
         <h3>Share the love</h3>
-        <p>We deliver your box from our kitchen — anywhere within <span data-db="max-miles">20</span> miles, for <span data-db="per-mile">$1</span> per mile.</p>
+        <p>We deliver your box from our kitchen — anywhere within <span data-db="max-miles">20</span> miles ♡</p>
       </li>
     </ol>
 
@@ -529,7 +529,7 @@
         <div class="kraft-tag" style="--tilt:-2deg">
           <ul class="order-details">
             <li><span>Lead time</span><strong>48–72 hours preferred</strong></li>
-            <li><span>Delivery</span><strong>Within <span data-db="max-miles">20</span> miles · <span data-db="per-mile">$1</span> per mile</strong></li>
+            <li><span>Delivery</span><strong>Within <span data-db="max-miles">20</span> miles · from <span data-db="delivery-from">$5</span></strong></li>
             <li><span>Call or text</span><strong><a href="tel:+17867596369">(786) 759-6369</a></strong></li>
             <li><span>Email</span><strong><a href="mailto:doughbunnybakery@gmail.com">doughbunnybakery@gmail.com</a></strong></li>
           </ul>
@@ -579,9 +579,19 @@
 
         <fieldset class="form-stage delivery-fields" id="deliveryFields">
           <legend class="stage-title"><span class="stage-num">03</span> Delivery</legend>
-          <p class="delivery-terms">Local delivery within <strong><span data-db="max-miles">20</span> miles</strong> (driving distance) · <strong><span data-db="per-mile">$1</span> per mile</strong></p>
-          <label class="field"><span>Delivery address</span><textarea name="address" id="deliveryAddress" rows="2" autocomplete="street-address" required aria-describedby="deliveryDistance" placeholder="Street, apt/unit, city, ZIP"></textarea></label>
-          <p class="delivery-distance" id="deliveryDistance" aria-live="polite"></p>
+          <p class="delivery-terms" id="deliveryTerms">Local delivery starts at <strong><span data-db="delivery-from">$5</span></strong> ♡ We'll confirm your delivery fee and order total with you before payment.</p>
+          <details class="delivery-rates">
+            <summary>See delivery rates</summary>
+            <ul class="rate-list" data-delivery-rates>
+              <li><span>0–5 miles</span><strong>$5</strong></li>
+              <li><span>Over 5–10 miles</span><strong>$8</strong></li>
+              <li><span>Over 10–15 miles</span><strong>$12</strong></li>
+              <li><span>Over 15–20 miles</span><strong>$16</strong></li>
+            </ul>
+            <p>Delivery distance is based on driving distance from our kitchen. Your exact fee will be confirmed with your order.</p>
+            <p>Farther than <span data-db="max-miles">20</span> miles is outside our standard delivery area — we'll let you know whether we can deliver to your address before you pay.</p>
+          </details>
+          <label class="field"><span>Delivery address <em>(street, city, state, ZIP)</em></span><textarea name="address" id="deliveryAddress" rows="2" autocomplete="street-address" required aria-describedby="deliveryTerms" placeholder="Street, apt/unit, city, state, ZIP"></textarea></label>
           <label class="field"><span>Delivery instructions <em>(optional)</em></span><textarea name="instructions" id="deliveryInstructions" rows="2" maxlength="300" placeholder="Gate code, apartment or unit number, where to leave the box, call when you arrive…"></textarea></label>
           <label class="field"><span>Who's it for? Notes &amp; allergies <em>(optional)</em></span><textarea name="message" rows="2" placeholder="A birthday, a thank-you, allergies we should know about…"></textarea></label>
           <div class="order-totals" id="orderTotals"></div>
@@ -590,7 +600,8 @@
           <p class="privacy-note">See our <a href="privacy.html">privacy policy</a> for how we use your information.</p>
         </fieldset>
 
-        <button type="submit" class="btn btn-primary btn-block" id="orderSubmit" disabled>Send My Cookie Order <svg aria-hidden="true"><use href="#d-heart-fill"/></svg></button>
+        <button type="submit" class="btn btn-primary btn-block" id="orderSubmit" disabled>Send My Order Request <svg aria-hidden="true"><use href="#d-heart-fill"/></svg></button>
+        <p class="submit-note">Nothing is charged now — this sends your order request, and we'll confirm before you pay.</p>
         <p class="form-note" id="formNote" role="status"></p>
       </form>
 
@@ -637,7 +648,7 @@
       </details>
       <details class="faq-item reveal" style="--tilt:.8deg">
         <summary>How much is delivery?</summary>
-        <p><span data-db="per-mile">$1</span> per mile of driving distance from our kitchen, once per order. Your exact delivery fee shows up once your address can be calculated — otherwise we'll confirm it when we reply to your order.</p>
+        <p>Local delivery is available within <span data-db="max-miles">20</span> miles of our kitchen. Delivery costs <span data-db="delivery-range">$5–$16</span> depending on driving distance. We'll confirm your exact fee before payment.</p>
       </details>
       <details class="faq-item reveal" style="--tilt:-.6deg">
         <summary>How far in advance should I order?</summary>
@@ -686,7 +697,8 @@
       <dl class="policy-list">
         <div><dt>Ordering &amp; lead time</dt><dd>Online orders are one standard box of exactly <span data-db="box-sizes">4, 6, or 12</span> cookies (minimum 4). For custom or larger orders, call, text, or email us. We prefer 48–72 hours' notice; same-day orders are accepted only if available. Your order is confirmed once we reply.</dd></div>
         <div><dt>Payment</dt><dd>We take payment by Square payment link. Full payment is due when your order is confirmed — we'll send your link with the confirmation. Nothing is charged when you send an order request.</dd></div>
-        <div><dt>Prices &amp; delivery</dt><dd>Cookie prices are per large cookie and include any applicable sales tax. Local delivery is available within <span data-db="max-miles">20</span> miles of our kitchen (driving distance) for <span data-db="per-mile">$1</span> per mile, once per order.</dd></div>
+        <div><dt>Prices</dt><dd>Cookie prices are per large cookie and include any applicable sales tax.</dd></div>
+        <div><dt>Delivery</dt><dd>Local delivery is available within <span data-db="max-miles">20</span> miles of our kitchen. A flat fee of <span data-db="delivery-fees">$5, $8, $12, or $16</span> applies according to one-way driving distance. Your delivery fee and order total will be confirmed before payment.</dd></div>
         <div><dt>Changes &amp; cancellations</dt><dd>Changes/cancellations: request at least 24 hours before delivery.</dd></div>
         <div><dt>Refunds</dt><dd>Made-to-order items are generally non-refundable. Contact us promptly about order issues.</dd></div>
         <div><dt>If delivery can't be completed</dt><dd>If delivery cannot be completed, we will contact you to arrange pickup or redelivery. Fees may apply.</dd></div>
