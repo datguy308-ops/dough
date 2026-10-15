@@ -525,7 +525,7 @@
       <div class="order-copy reveal">
         <p class="hand-label">order ahead</p>
         <h2>Let us bake something <span class="script-accent">for you.</span></h2>
-        <p>Build a box of <span data-db="box-sizes">4, 6, or 12</span> with your favorite flavors, and we'll get back to you to confirm your delivery. Baking for a birthday, a thank-you, or a just-because? We love hearing who it's for.</p>
+        <p>Build a box of <span data-db="box-sizes">4, 6, or 12</span> with your favorite flavors, and we'll text you to confirm your delivery. Baking for a birthday, a thank-you, or a just-because? We love hearing who it's for.</p>
         <div class="kraft-tag" style="--tilt:-2deg">
           <ul class="order-details">
             <li><span>Lead time</span><strong>48–72 hours preferred</strong></li>
@@ -553,10 +553,11 @@
           <legend class="stage-title"><span class="stage-num">01</span> Your information</legend>
           <div class="field-row">
             <label class="field"><span>Name</span><input type="text" name="name" autocomplete="name" required></label>
-            <label class="field"><span>Email</span><input type="email" name="email" autocomplete="email" required></label>
+            <label class="field"><span>Mobile phone</span><input type="tel" name="phone" autocomplete="tel" inputmode="tel" required aria-describedby="phoneHint" placeholder="(555) 555-5555"></label>
           </div>
+          <p class="field-hint" id="phoneHint">We'll text you to confirm your order, delivery fee, and total ♡</p>
           <div class="field-row">
-            <label class="field"><span>Phone <em>(optional)</em></span><input type="tel" name="phone" autocomplete="tel"></label>
+            <label class="field"><span>Email <em>(optional, backup only)</em></span><input type="email" name="email" autocomplete="email"></label>
             <label class="field"><span>Delivery date</span><input type="date" name="date" id="deliveryDate" required aria-describedby="dateHint"></label>
           </div>
           <label class="field"><span>Preferred delivery time</span>
@@ -679,7 +680,7 @@
       </details>
       <details class="faq-item reveal" style="--tilt:.4deg">
         <summary>How do I pay?</summary>
-        <p>By Square payment link. Once we confirm your order and delivery fee, we'll send you a link for the full amount. Nothing is charged when you send your order request.</p>
+        <p>By Square payment link. Once we confirm your order and delivery fee, we'll text you a link for the full amount. Nothing is charged when you send your order request.</p>
       </details>
       <details class="faq-item reveal" style="--tilt:-.6deg">
         <summary>Do you take custom or larger orders?</summary>
@@ -702,8 +703,8 @@
       <p class="hand-label">the fine print, kindly</p>
       <h2 id="policiesTitle">Order policies</h2>
       <dl class="policy-list">
-        <div><dt>Ordering &amp; lead time</dt><dd>Online orders are one standard box of exactly <span data-db="box-sizes">4, 6, or 12</span> cookies (minimum 4). For custom or larger orders, call, text, or email us. We prefer 48–72 hours' notice; same-day orders are accepted only if available. Your order is confirmed once we reply.</dd></div>
-        <div><dt>Payment</dt><dd>We take payment by Square payment link. Full payment is due when your order is confirmed — we'll send your link with the confirmation. Nothing is charged when you send an order request.</dd></div>
+        <div><dt>Ordering &amp; lead time</dt><dd>Online orders are one standard box of exactly <span data-db="box-sizes">4, 6, or 12</span> cookies (minimum 4). For custom or larger orders, call, text, or email us. We prefer 48–72 hours' notice; same-day orders are accepted only if available. Your order is confirmed once we text you to confirm it.</dd></div>
+        <div><dt>Payment</dt><dd>We take payment by Square payment link. Full payment is due when your order is confirmed — we'll text you the link with your confirmation. Nothing is charged when you send an order request.</dd></div>
         <div><dt>Prices</dt><dd>Cookie prices are per large cookie and include any applicable sales tax.</dd></div>
         <div><dt>Delivery</dt><dd>Local delivery is available within <span data-db="max-miles">20</span> miles of our kitchen. A flat fee of <span data-db="delivery-fees">$5, $8, $12, or $16</span> applies according to one-way driving distance. Your delivery fee and order total will be confirmed before payment.</dd></div>
         <div><dt>Changes &amp; cancellations</dt><dd>Changes/cancellations: request at least 24 hours before delivery.</dd></div>

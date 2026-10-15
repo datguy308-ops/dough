@@ -136,8 +136,8 @@ document.addEventListener('DOMContentLoaded', () => {
   function orderSummaryText(order) {
     const lines = [
       `Name: ${order.name}`,
-      `Email: ${order.email}`,
-      order.phone ? `Phone: ${order.phone}` : null,
+      order.email ? `Email: ${order.email}` : null,
+      `Phone (text to confirm): ${order.phone}`,
       `Delivery date: ${order.deliveryDate} (${order.deliveryWindow})`,
       `Delivery address: ${order.delivery.address}`,
       order.delivery.instructions ? `Delivery instructions: ${order.delivery.instructions}` : null,
@@ -184,8 +184,8 @@ document.addEventListener('DOMContentLoaded', () => {
       + (order.allergensPending.length ? ` Allergen details for ${order.allergensPending.join(', ')} are coming soon — we'll go over them with you.` : ''), 'order-receipt-note');
 
     $('confirmNext').textContent = sent
-      ? 'Dough Bunny will check your address and reach out to confirm your delivery fee, full order total, and delivery time — then send your Square payment link.'
-      : 'Once we have it, Dough Bunny will check your address and reach out to confirm your delivery fee, full order total, and delivery time — then send your Square payment link.';
+      ? `Dough Bunny will check your address and text you at ${order.phone} to confirm your delivery fee, full order total, and delivery time — then text you your Square payment link.`
+      : `Once we have it, Dough Bunny will check your address and text you at ${order.phone} to confirm your delivery fee, full order total, and delivery time — then text you your Square payment link.`;
 
     form.hidden = true;
     confirmBox.hidden = false;
@@ -212,7 +212,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const missing = [...form.querySelectorAll('[required]')].filter(f => (f.type === 'checkbox' ? !f.checked : !f.value.trim()));
     const agree = document.getElementById('agreePolicies');
     const email = form.elements.email;
-    const badEmail = !missing.includes(email) && !email.checkValidity();
+    const badEmail = !missing.includes(email) && !email.checkValidity();   // optional, but must be valid if given
+    const phone = form.elements.phone;
+    const badPhone = !missing.includes(phone) && phone.value.replace(/\D/g, '').replace(/^1(?=\d{10}$)/, '').length !== 10;
     const badAddress = !missing.includes(addressInput) && !hasZip(addressInput.value);
 
     if (!box.ok) {
@@ -224,15 +226,19 @@ document.addEventListener('DOMContentLoaded', () => {
       firstAdd && firstAdd.focus();
       return;
     }
-    if (missing.length || badEmail) {
-      missing.concat(badEmail ? [email] : []).forEach(f => f.setAttribute('aria-invalid', 'true'));
+    if (missing.length || badEmail || badPhone) {
+      missing.concat(badPhone ? [phone] : [], badEmail ? [email] : []).forEach(f => f.setAttribute('aria-invalid', 'true'));
       formNote.classList.add('is-error');
       formNote.textContent = missing.includes(addressInput)
         ? 'Please add your delivery address (and fill in any other missing details).'
         : missing.length === 1 && missing[0] === agree
           ? 'Please confirm you\'ve read the order policies and allergen information.'
-          : 'Please fill in your name, a valid email, a delivery date, and a preferred delivery time.';
-      (missing[0] || email).focus();
+          : !missing.length && badPhone
+            ? 'Please enter a 10-digit mobile number so we can text you to confirm your order.'
+            : !missing.length && badEmail
+              ? 'That email doesn\'t look quite right — please fix it, or leave it blank.'
+              : 'Please fill in your name, a mobile number we can text, a delivery date, and a preferred delivery time.';
+      (missing[0] || (badPhone ? phone : email)).focus();
       return;
     }
     if (badAddress) {
@@ -250,7 +256,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const order = {
         name: form.elements.name.value.trim(),
         email: email.value.trim(),
-        phone: form.elements.phone.value.trim(),
+        phone: phone.value.trim(),
         deliveryDate: form.elements.date.value,
         deliveryWindow: form.elements.deliveryWindow.value,
         notes: form.elements.message.value.trim(),
@@ -283,7 +289,7 @@ document.addEventListener('DOMContentLoaded', () => {
           sent = true;
         } catch (err) {
           formNote.classList.add('is-error');
-          formNote.textContent = 'Something went wrong sending your order. Please try again in a moment, or email us.';
+          formNote.textContent = 'Something went wrong sending your order. Please try again in a moment, or call or text us at (786) 759-6369.';
           return;
         }
       }
