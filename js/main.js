@@ -100,6 +100,35 @@ document.addEventListener('DOMContentLoaded', () => {
     get connected() { return !!submitHandler; }
   };
 
+  // Netlify Forms: on the live site, each order request is posted to Netlify, which emails it to
+  // the bakery (Netlify → Forms → notifications). Local previews keep the "not sent" fallback.
+  const isLocalPreview = location.protocol === 'file:' || /^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname);
+  if (!isLocalPreview) {
+    DoughOrders.setSubmitHandler(async (order) => {
+      const body = new URLSearchParams({
+        'form-name': 'order',
+        'bot-field': form.elements['bot-field'].value,
+        name: order.name,
+        email: order.email,
+        phone: order.phone,
+        date: order.deliveryDate,
+        deliveryWindow: order.deliveryWindow,
+        address: order.delivery.address,
+        instructions: order.delivery.instructions,
+        message: order.notes,
+        box: `Box of ${order.boxSize}: ` + order.box.map(l => `${l.qty} x ${l.flavor}`).join(', '),
+        cookieSubtotal: DB.money(order.cookiesTotal),
+        status: order.status,
+        agree: order.agreedToPolicies ? 'yes' : 'no',
+        marketing: order.marketing.optIn ? 'yes' : 'no',
+        marketingConsent: order.marketing.optIn ? `${order.marketing.consentText} (agreed ${order.marketing.at})` : '',
+        orderSummary: orderSummaryText(order)
+      });
+      const res = await fetch('/', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: body.toString() });
+      if (!res.ok) throw new Error('send failed: ' + res.status);   // shows "please try again"
+    });
+  }
+
   const formNote = document.getElementById('formNote');
   const submitBtn = document.getElementById('orderSubmit');
   const confirmBox = document.getElementById('orderConfirm');

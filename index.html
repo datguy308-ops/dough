@@ -537,7 +537,14 @@
         <p class="order-hand" aria-hidden="true">we can't wait to<br>bake for you! <svg><use href="#d-arrow"/></svg></p>
       </div>
 
-      <form class="order-form reveal" id="orderForm" novalidate style="--tilt:.6deg">
+      <form class="order-form reveal" id="orderForm" name="order" method="POST" data-netlify="true" data-netlify-honeypot="bot-field" novalidate style="--tilt:.6deg">
+        <!-- Netlify Forms: order requests are emailed to the bakery. Hidden fields are filled in on submit. -->
+        <input type="hidden" name="form-name" value="order">
+        <input type="hidden" name="orderSummary">
+        <input type="hidden" name="cookieSubtotal">
+        <input type="hidden" name="status">
+        <input type="hidden" name="marketingConsent">
+        <p hidden><label>Leave this empty: <input type="text" name="bot-field" tabindex="-1" autocomplete="off"></label></p>
         <span class="tape tape--tl tape--pink" aria-hidden="true"></span>
         <span class="tape tape--tr tape--butter" aria-hidden="true"></span>
         <p class="form-title">Your cookie order <svg aria-hidden="true"><use href="#d-heart-fill"/></svg></p>

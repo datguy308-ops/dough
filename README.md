@@ -8,7 +8,7 @@ Website for Dough Bunny, a Florida home bakery making homemade cookies & treats 
 - `css/style.css` — design tokens (cream / deep purple / lavender / pink / butter / cookie brown), Fraunces + Caveat + Nunito Sans, paper grain, torn page edges, gingham, washi tape, paper shadows. Paper objects tilt via `--tilt` (the `rotate` property) so reveals (`translate`) never fight with it.
 - `js/cookies.js` — draws the illustrated SVG cookie for each flavor (`data-cookie="choc|strawberry|cutout|snicker|banana|brownie|smores"`).
 - `js/box.js` — the Build Your Box model, pricing, and box UI. **All business values live here**: `PRICES` (per large cookie, cents, tax included), `BOX_SIZES` (4, 6, 12 — the total must be exactly one of these; 12 is the per-order max), `DELIVERY_RATES` (flat fee by driving distance, display only), `MAX_DELIVERY_MILES` (20). The page never hard-codes them: card prices use `data-price-for="<flavor id>"`, and copy uses `data-db="max-miles | delivery-from | delivery-range | delivery-fees | box-sizes"` (and `data-delivery-rates` for the rates list), which `box.js` fills in. `validate()` is the single rule (reuse it server-side). The chosen box size (`setTarget`) only guides the UI — size picker, the little box meter, "add N more" copy. Saved in localStorage (`doughbunny.box.v1`: items + chosen size) and shared by the card steppers, the form's builder, the floating box sticker, and the box summary. Flavor ids are the exact cookbook names (e.g. "Strawberry Shortcake"); older saved boxes are migrated via `RENAMED`.
-- `privacy.html` — privacy policy (Square, Gmail, Google Fonts, marketing opt-in, local storage). Name the form provider there before turning them on.
+- `privacy.html` — privacy policy (Square, Gmail, Google Fonts, marketing opt-in, local storage). Lists Netlify as the host and form service.
 - `js/main.js` — header, mobile nav, scroll reveal, hero parallax, order summary (delivery fee to be confirmed), order submit + confirmation.
 - `assets/images/` — `logo.jpg` (round brand mark), `logo-wordmark.webp` (full logo, upscaled), favicon / touch icon / og image; `original/` keeps the source logo.
 - `assets/graphics/` — illustration library (see its README for the upscaling pipeline).
@@ -17,7 +17,7 @@ Website for Dough Bunny, a Florida home bakery making homemade cookies & treats 
 
 **Delivery fees (manual).** The site never calculates a distance or a fee and uses no maps service. `DELIVERY_RATES` in `js/box.js` is the flat-rate table (0–5 mi $5 · over 5–10 mi $8 · over 10–15 mi $12 · over 15–20 mi $16; over 20 mi is outside the standard area), used only to show the rates. Each order arrives with `status: "Delivery fee pending confirmation"` and `delivery.fee: null`; the owner checks the driving distance, confirms the fee, availability and full total with the customer, and only then sends the Square payment link. The form requires a ZIP code in the address so it can be checked.
 
-**Sending orders (form service / email / backend).** Nothing is sent yet. Register a handler and the confirmation switches to "we got your order request":
+**Sending orders (Netlify Forms).** The order form is a Netlify form named `order` (`data-netlify="true"`, honeypot `bot-field`). On the live site, `js/main.js` posts each request to Netlify with every field plus a readable `orderSummary` and `status: Delivery fee pending confirmation`; Netlify emails it to the bakery once a notification is set up (Netlify → Forms → Form notifications). On `localhost`/`file:` previews nothing is sent and the confirmation offers a pre-written email instead. To use a different service, register your own handler:
 
 ```js
 DoughOrders.setSubmitHandler(async (order) => {
@@ -41,7 +41,7 @@ DoughOrders.setSubmitHandler(async (order) => {
 
 ## Before launch
 
-Still open: Banana Pudding allergens; all ingredient lists; delivery days/times; confirmation response time; form and hosting providers (then name them in `privacy.html`); data retention period; Our Kitchen letter; cookie photos; real reviews.
+Still open: Banana Pudding allergens; all ingredient lists; delivery days/times; confirmation response time; data retention period; Our Kitchen letter; cookie photos; real reviews.
 
 ## Running locally
 
