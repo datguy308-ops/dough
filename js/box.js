@@ -54,8 +54,8 @@
     "S'mores": { contains: ['Wheat', 'Milk', 'Eggs', 'Soy'], note: 'Cross-contact with other major allergens may occur.' },
     'Strawberry Shortcake': { contains: ['Wheat', 'Milk', 'Eggs', 'Soy'], note: 'Cross-contact with other major allergens may occur.' },
     'Frosted Butter Cookie': { contains: ['Wheat', 'Milk', 'Eggs'], note: 'Made in a kitchen that handles soy, peanuts, tree nuts, sesame, and other major allergens; cross-contact may occur.' },
+    'Banana Pudding': { contains: ['Wheat', 'Milk', 'Eggs', 'Soy'], note: 'Cross-contact with other major allergens may occur.' },
     'Brownie Cookie': { contains: ['Wheat', 'Milk', 'Eggs', 'Soy'], note: 'Made in a kitchen that handles peanuts, tree nuts, sesame, and other major allergens; cross-contact may occur.' }
-    // 'Banana Pudding': not provided yet
   };
   // Full ingredient lists (in descending order by weight, as on the box label). Add each one as
   // the bakery provides it, e.g. 'Chocolate Chip': 'Enriched flour (wheat flour, …), butter (milk), …'

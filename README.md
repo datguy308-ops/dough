@@ -32,7 +32,7 @@ DoughOrders.setSubmitHandler(async (order) => {
 
 - Contact: (786) 759-6369 · doughbunnybakery@gmail.com · Instagram @dough_bunny (no Facebook).
 - Menu (exact cookbook names, no others): Chocolate Chip, Snickerdoodle, S'mores, Strawberry Shortcake, Frosted Butter Cookie (the signature, bunny-shaped), Banana Pudding, Brownie Cookie.
-- Allergens per flavor live in `ALLERGENS` in `js/box.js`; Banana Pudding's are still pending and show "coming soon". Full ingredient lists go in `INGREDIENTS` (all pending); each card's "Ingredients" section fills in automatically.
+- Allergens per flavor live in `ALLERGENS` in `js/box.js`; a flavor without an entry would show "allergen details coming soon". Full ingredient lists go in `INGREDIENTS` (all pending); each card's "Ingredients" section fills in automatically.
 - Approved claims: made from scratch, small batches, real butter, pure vanilla extract, whole eggs, real chocolate, hand-piped frosting, rolled and cut by hand. Not approved yet: "no artificial preservatives", "real fruit", "baked fresh to order", shelf-stability.
 - Payment: Square payment link, full amount when the order is confirmed. Prices include any applicable sales tax.
 - Policies (cancellation before delivery, refund, failed delivery, unavailable at delivery, same-day "only if available") are shown in the Order Policies section and FAQ.
@@ -41,7 +41,7 @@ DoughOrders.setSubmitHandler(async (order) => {
 
 ## Before launch
 
-Still open: Banana Pudding allergens; all ingredient lists; delivery days/times; confirmation response time; data retention period; Our Kitchen letter; cookie photos; real reviews.
+Still open: all ingredient lists; delivery days/times; confirmation response time; data retention period; Our Kitchen letter; cookie photos; real reviews.
 
 ## Running locally
 
